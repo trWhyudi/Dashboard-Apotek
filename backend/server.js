@@ -5,8 +5,14 @@ import dotenv from 'dotenv';
 import morgan from 'morgan';
 import cookieParser from "cookie-parser";
 import userRoute from './routes/userRoute.js';
+import medicineRoute from './routes/medicineRoute.js';
 import { errorMiddleware } from './middleware/errorMiddleware.js';
+import path from 'path';
+import { fileURLToPath } from 'url';
 dotenv.config();
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 
 const app = express();
@@ -30,8 +36,12 @@ mongoose.connect(mongoUrl).then(() => {
     console.error('Error connecting to MongoDB:', error);
 });
 
+// Serve static files from uploads directory
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
 // Routes
 app.use('/api/v1/user', userRoute);
+app.use('/api/v1/medicine', medicineRoute);
 
 // listen to the server
 app.listen(port, () => {
