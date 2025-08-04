@@ -74,19 +74,5 @@ transactionSchema.pre('save', async function(next) {
     next();
 });
 
-// Update medicine stock after transaction is completed
-transactionSchema.pre('save', async function(next) {
-    if (this.isModified('status') && this.status === 'completed') {
-        for (const item of this.items) {
-            const medicine = await mongoose.model('Medicine').findById(item.medicine);
-            if (medicine) {
-                medicine.stock -= item.quantity;
-                await medicine.save();
-            }
-        }
-    }
-    next();
-});
-
 const Transaction = mongoose.model('Transaction', transactionSchema);
 export default Transaction;

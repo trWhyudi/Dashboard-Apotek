@@ -23,6 +23,8 @@ router.get('/all-users', isAuthenticated, getAllUser);
 // Update user
 router.put("/update-user/:id", isAuthenticated, updateUser);
 // Delete user
+// LogOut user
+
 router.delete("/delete-user/:id", isAuthenticated, deleteUser);
 // Lupa password
 router.post("/forgot-password", forgotPassword);

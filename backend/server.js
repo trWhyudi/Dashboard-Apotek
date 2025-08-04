@@ -6,6 +6,7 @@ import morgan from 'morgan';
 import cookieParser from "cookie-parser";
 import userRoute from './routes/userRoute.js';
 import medicineRoute from './routes/medicineRoute.js';
+import transactionRoute from './routes/transactionRoute.js';
 import { errorMiddleware } from './middleware/errorMiddleware.js';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -42,6 +43,7 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 // Routes
 app.use('/api/v1/user', userRoute);
 app.use('/api/v1/medicine', medicineRoute);
+app.use('/api/v1/transaction', transactionRoute);
 
 // listen to the server
 app.listen(port, () => {

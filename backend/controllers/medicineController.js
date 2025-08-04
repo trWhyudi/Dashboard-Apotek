@@ -96,6 +96,30 @@ export const getAllMedicines = errorHandleMiddleware(async (req, res, next) => {
     }
 });
 
+// get medicine by id
+export const getMedicineById = errorHandleMiddleware(async (req, res, next) => {
+    try {
+        const medicine = await Medicine.findById(req.params.id);
+
+        if (!medicine) {
+            return next(new ErrorHandler("Obat tidak ditemukan", 404));
+        }
+
+        res.status(200).json({
+            success: true,
+            message: "Obat berhasil ditemukan",
+            medicine
+        });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            success: false,
+            message: "Terjadi kesalahan saat mengambil detail obat",
+            error: error.message
+        });
+    }
+})
+
 // update medicine
 export const updateMedicine = errorHandleMiddleware(async (req, res, next) => {
     try {
