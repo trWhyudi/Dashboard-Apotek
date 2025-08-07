@@ -1,5 +1,5 @@
 import express from 'express';
-import { createUser, loginUser, createAdmin, getSingleAdmin, getAdminProfile, logOutAdmin, getCurrentUser, getAllUser, updateUser, deleteUser, forgotPassword, resetPassword } from '../controllers/userController.js';
+import { createUser, loginUser, createAdmin, getSingleAdmin, getAdminProfile, logOutAdmin, getCurrentUser, getAllUser, updateUser, deleteUser, forgotPassword, resetPassword, logoutUser } from '../controllers/userController.js';
 import { adminTokenAuth, isAuthenticated } from '../middleware/auth.js';
 
 const router = express.Router();
@@ -22,9 +22,9 @@ router.get('/me', isAuthenticated, getCurrentUser);
 router.get('/all-users', isAuthenticated, getAllUser);
 // Update user
 router.put("/update-user/:id", isAuthenticated, updateUser);
-// Delete user
 // LogOut user
-
+router.get("/logout-user", isAuthenticated, logoutUser);
+// Delete user
 router.delete("/delete-user/:id", isAuthenticated, deleteUser);
 // Lupa password
 router.post("/forgot-password", forgotPassword);
