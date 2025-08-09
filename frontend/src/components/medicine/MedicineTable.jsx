@@ -14,6 +14,9 @@ const MedicineTable = ({ medicines, onDelete }) => {
               Nama Obat
             </th>
             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              Kategori
+            </th>
+            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
               Harga
             </th>
             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -43,6 +46,9 @@ const MedicineTable = ({ medicines, onDelete }) => {
                   <div className="text-sm text-gray-500 truncate max-w-xs">
                     {medicine.description}
                   </div>
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                  {medicine.category}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                   Rp {medicine.price.toLocaleString()}

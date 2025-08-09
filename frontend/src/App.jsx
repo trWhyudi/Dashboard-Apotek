@@ -10,6 +10,9 @@ import MedicineFormPage from './pages/admin/MedicineFormPage';
 import EditMedicinePage from './pages/admin/EditMedicinePage';
 import CustomerDashboard from './pages/customer/Dashboard';
 import CustomerProfile from './pages/customer/Profile';
+import AdminTransactions from './pages/admin/Transactions';
+import TransactionDetail from './pages/admin/TransactionDetail';
+import CreateTransaction from './pages/admin/CreateTransaction';
 import NotFound from './pages/NotFound';
 import PrivateRoute from './components/auth/PrivateRoute';
 import AdminMedicines from './pages/admin/Medicines';
@@ -68,14 +71,30 @@ const App = () => {
                     </PrivateRoute>
                   }
                 />
-                {/* <Route
-                  path="/admin/reports"
+                <Route
+                  path="/admin/transactions"
                   element={
                     <PrivateRoute allowedRoles={['Admin']}>
-                      <AdminReports />
+                      <AdminTransactions />
                     </PrivateRoute>
                   }
-                /> */}
+                />
+                <Route
+                  path="/admin/transactions/create"
+                  element={
+                    <PrivateRoute allowedRoles={['Admin']}>
+                      <CreateTransaction />
+                    </PrivateRoute>
+                  }
+                />
+                <Route
+                  path="/admin/transactions/:id"
+                  element={
+                    <PrivateRoute allowedRoles={['Admin']}>
+                      <TransactionDetail />
+                    </PrivateRoute>
+                  }
+                />
                 
                 {/* Customer Routes */}
                 <Route

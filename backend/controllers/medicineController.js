@@ -9,9 +9,9 @@ export const uploadMedicineImage = upload.single('image');
 // Create medicine
 export const createMedicine = errorHandleMiddleware(async (req, res, next) => {
     try {
-        const { name, description, price, stock, expired } = req.body;
+        const { name, description, category, price, stock, expired } = req.body;
         
-        if (!name || !description || !price || !stock || !expired ) {
+        if (!name || !description || !category || !price || !stock || !expired ) {
             return next(new ErrorHandler("Semua field harus diisi", 400));
         }
 
@@ -21,6 +21,7 @@ export const createMedicine = errorHandleMiddleware(async (req, res, next) => {
         const medicine = new Medicine({
             name,
             description,
+            category,
             price,
             stock,
             image,
@@ -119,6 +120,39 @@ export const getMedicineById = errorHandleMiddleware(async (req, res, next) => {
         });
     }
 })
+
+// Get medicine count by category
+export const getCategorySummary = errorHandleMiddleware(async (req, res, next) => {
+  try {
+    const summary = await Medicine.aggregate([
+      {
+        $group: {
+          _id: "$category",
+          count: { $sum: 1 }
+        }
+      },
+      {
+        $project: {
+          _id: 0,
+          name: "$_id",
+          count: 1
+        }
+      }
+    ]);
+
+    res.status(200).json({
+      success: true,
+      categories: summary
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      success: false,
+      message: "Gagal mengambil ringkasan kategori",
+      error: error.message
+    });
+  }
+});
 
 // update medicine
 export const updateMedicine = errorHandleMiddleware(async (req, res, next) => {

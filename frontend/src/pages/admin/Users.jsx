@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import api from '../../utils/api';
 import Table from '../../components/ui/Table';
+import Swal from 'sweetalert2';
 
 const AdminUsers = () => {
   const [users, setUsers] = useState([]);
@@ -20,6 +21,30 @@ const AdminUsers = () => {
     fetchUsers();
   }, []);
 
+  const handleDelete = async (id) => {
+    const result = await Swal.fire({
+      title: 'Yakin ingin menghapus?',
+      text: "Data yang dihapus tidak dapat dikembalikan!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Ya, hapus!',
+      cancelButtonText: 'Batal'
+    });
+
+    if (result.isConfirmed) {
+      try {
+        await api.delete(`/user/delete-user/${id}`);
+        setUsers(users.filter(user => user._id !== id));
+        Swal.fire('Deleted!', 'Pengguna berhasil dihapus.', 'success');
+      } catch (error) {
+        console.error('Error deleting user:', error);
+        Swal.fire('Error!', 'Gagal menghapus pengguna.', 'error');
+      }
+    }
+  };
+
   const headers = [
     { key: 'name', label: 'Name' },
     { key: 'email', label: 'Email' },
@@ -30,10 +55,12 @@ const AdminUsers = () => {
   const tableData = users.map((user) => ({
     ...user,
     actions: (
-      <div className="space-x-2">
-        <button className="text-indigo-600 hover:text-indigo-900">Edit</button>
-        <button className="text-red-600 hover:text-red-900">Delete</button>
-      </div>
+      <button
+        onClick={() => handleDelete(user._id)}
+        className="text-red-600 hover:text-red-900"
+      >
+        Delete
+      </button>
     ),
   }));
 
@@ -44,12 +71,9 @@ const AdminUsers = () => {
   return (
     <div className="ml-64 pt-16 p-6">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold text-gray-800">Users Management</h1>
-        <button className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700">
-          Add User
-        </button>
+        <h1 className="text-2xl font-bold text-gray-800">Users List</h1>
       </div>
-      
+
       <div className="bg-white p-6 rounded-lg shadow">
         <Table headers={headers} data={tableData} />
       </div>

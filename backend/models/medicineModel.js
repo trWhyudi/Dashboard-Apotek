@@ -9,6 +9,11 @@ const medicineSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    category: {
+        type: String,
+        required: true,
+        enum: ['Obat Bebas', 'Obat Keras', 'Herbal', 'Alat Kesehatan', 'Vitamin']
+    },
     price: {
         type: Number,
         required: true,

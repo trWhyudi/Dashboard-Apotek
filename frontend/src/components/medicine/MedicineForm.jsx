@@ -8,6 +8,7 @@ const MedicineForm = ({ isEdit = false }) => {
   const { id } = useParams();
   const [formData, setFormData] = useState({
     name: '',
+    category: '',
     description: '',
     price: '',
     stock: '',
@@ -26,6 +27,7 @@ const MedicineForm = ({ isEdit = false }) => {
           const medicine = response.data.medicine;
           setFormData({
             name: medicine.name,
+            category: medicine.category || '',
             description: medicine.description,
             price: medicine.price.toString(),
             stock: medicine.stock.toString(),
@@ -68,6 +70,7 @@ const MedicineForm = ({ isEdit = false }) => {
     try {
       const formDataToSend = new FormData();
       formDataToSend.append('name', formData.name);
+      formDataToSend.append('category', formData.category);
       formDataToSend.append('description', formData.description);
       formDataToSend.append('price', formData.price);
       formDataToSend.append('stock', formData.stock);
@@ -133,6 +136,26 @@ const MedicineForm = ({ isEdit = false }) => {
               required
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
             />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Kategori Obat *
+            </label>
+            <select
+              name="category"
+              value={formData.category}
+              onChange={handleChange}
+              required
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+            >
+              <option value="">Pilih Kategori</option>
+              <option value="Obat Bebas">Obat Bebas</option>
+              <option value="Obat Keras">Obat Keras</option>
+              <option value="Herbal">Herbal</option>
+              <option value="Alat Kesehatan">Alat Kesehatan</option>
+              <option value="Vitamin">Vitamin</option>
+            </select>
           </div>
 
           <div className="col-span-2">

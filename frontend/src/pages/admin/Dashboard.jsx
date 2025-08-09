@@ -19,22 +19,24 @@ const AdminDashboard = () => {
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        const [usersRes, medicinesRes] = await Promise.all([
+        const [usersRes, medicinesRes, transactionsRes] = await Promise.all([
           api.get('/user/all-users'),
           api.get('/medicine/all-medicines'),
-          // api.get('/transaction'),
+          api.get('/transaction/all-transactions'),
         ]);
 
-        // const revenue = transactionsRes.data.transactions.reduce(
-        //   (sum, transaction) => sum + transaction.totalPrice,
-        //   0
-        // );
+        const transactions = transactionsRes.data.transactions || [];
+
+        const revenue = transactions.reduce(
+          (sum, transaction) => sum + (transaction.totalAmount || 0),
+          0
+        );
 
         setStats({
           users: usersRes.data.users.length,
           medicines: medicinesRes.data.medicines.length,
-          // transactions: transactionsRes.data.transactions.length,
-          // revenue,
+          transactions: transactions.length,
+          revenue,
         });
       } catch (error) {
         console.error('Error fetching stats:', error);
@@ -53,32 +55,32 @@ const AdminDashboard = () => {
   return (
     <div className="ml-64 pt-16 p-6">
       <h1 className="text-2xl font-bold text-gray-800 mb-6">Admin Dashboard</h1>
-      
+
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         <Card
           title="Total Users"
           value={stats.users}
-          icon={<FaUser color='#3B82F6'/>}
+          icon={<FaUser color='#3B82F6' />}
           color="bg-blue-100 text-blue-600"
         />
         <Card
           title="Total Medicines"
           value={stats.medicines}
-          icon={<FaNotesMedical color='#3B82F6'/>}
+          icon={<FaNotesMedical color='#22C55E' />}
           color="bg-green-100 text-green-600"
         />
-        {/* <Card
+        <Card
           title="Total Transactions"
           value={stats.transactions}
-          icon="receipt"
+          icon={<FaMoneyBillTransfer color='#8B5CF6' />}
           color="bg-purple-100 text-purple-600"
-        /> */}
-        {/* <Card
+        />
+        <Card
           title="Total Revenue"
-          value={`Rp ${stats.revenue.toLocaleString()}`}
-          icon="attach_money"
+          value={`Rp ${stats.revenue.toLocaleString('id-ID')}`}
+          icon={<BiSolidReport color='#F59E0B' />}
           color="bg-yellow-100 text-yellow-600"
-        /> */}
+        />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
