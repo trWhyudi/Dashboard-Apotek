@@ -62,6 +62,9 @@ export const generateReport = errorHandleMiddleware(async (req, res, next) => {
         // Generate PDF
         await report.generatePDF(outputPath);
 
+        report.pdfPath = `/uploads/reports/${filename}`;
+        await report.save();
+
         res.status(201).json({
             success: true,
             message: 'Laporan berhasil dibuat',

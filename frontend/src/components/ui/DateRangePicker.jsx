@@ -1,19 +1,29 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 
-const DateRangePicker = ({ onChange }) => {
-  const [startDate, setStartDate] = useState(null);
-  const [endDate, setEndDate] = useState(null);
+const DateRangePicker = ({ onChange, value }) => {
+  const [startDate, setStartDate] = useState(value?.startDate || null);
+  const [endDate, setEndDate] = useState(value?.endDate || null);
+
+  // Sinkronisasi jika props berubah
+  useEffect(() => {
+    setStartDate(value?.startDate || null);
+    setEndDate(value?.endDate || null);
+  }, [value]);
 
   const handleDateChange = (dates) => {
     const [start, end] = dates;
     setStartDate(start);
     setEndDate(end);
     
-    if (start && end) {
-      onChange({ startDate: start, endDate: end });
-    }
+    onChange({ startDate: start, endDate: end });
+  };
+
+  const handleClear = () => {
+    setStartDate(null);
+    setEndDate(null);
+    onChange({ startDate: null, endDate: null });
   };
 
   return (
@@ -23,17 +33,12 @@ const DateRangePicker = ({ onChange }) => {
         startDate={startDate}
         endDate={endDate}
         onChange={handleDateChange}
-        isClearable
-        placeholderText="Select date range"
+        placeholderText="Pilih rentang tanggal..."
         className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
       />
-      {startDate && endDate && (
+      {(startDate || endDate) && (
         <button
-          onClick={() => {
-            setStartDate(null);
-            setEndDate(null);
-            onChange({ startDate: null, endDate: null });
-          }}
+          onClick={handleClear}
           className="text-sm text-indigo-600 hover:text-indigo-900"
         >
           Clear

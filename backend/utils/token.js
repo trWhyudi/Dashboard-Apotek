@@ -5,8 +5,8 @@ export const jsontoken = (user, message, statusCode, res) => {
         case "Admin":
             cookieName="adminToken";
             break;
-        case "Pelanggan":
-            cookieName="pelangganToken";
+        case "Kasir":
+            cookieName="kasirToken";
             break;
         default:
             throw new Error("Invalid role user");

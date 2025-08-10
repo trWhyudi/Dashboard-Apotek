@@ -39,32 +39,24 @@ export const createAdmin = errorHandleMiddleware(async (req, res, next) => {
 
 // Login user and admin
 export const loginUser = errorHandleMiddleware(async (req, res, next) => {
-    try {
-        const { email, password } = req.body;
+    const { email, password } = req.body;
 
-        if (!email || !password) {
-            return next(new ErrorHandler("Email dan password harus diisi", 400));
-        }
-
-        const user = await User.findOne({ email }).select("+password");
-        if (!user) {
-            return next(new ErrorHandler("Email atau password salah", 401));
-        }
-
-        const isPasswordValid = await user.comparePassword(password);
-        if (!isPasswordValid) {
-            return next(new ErrorHandler("Email atau password salah", 401));
-        }
-
-        jsontoken(user, "Login berhasil", 200, res);
-    } catch (error) {
-        console.log(error);
-        res.status(500).json({
-            success: false,
-            message: "Terjadi kesalahan saat login",
-            error: error.message
-        });
+    if (!email || !password) {
+        return next(new ErrorHandler("Email dan password harus diisi", 400));
     }
+
+    const user = await User.findOne({ email }).select("+password");
+    if (!user) {
+        return next(new ErrorHandler("Email atau password salah", 401));
+    }
+
+    const isPasswordValid = await user.comparePassword(password);
+    if (!isPasswordValid) {
+        return next(new ErrorHandler("Email atau password salah", 401));
+    }
+
+    // Pakai fungsi jsontoken yang sudah atur cookie dan response
+    jsontoken(user, "Login berhasil", 200, res);
 });
 
 // Get admin by ID
@@ -108,26 +100,6 @@ export const getAdminProfile = errorHandleMiddleware(async (req, res, next) => {
         res.status(500).json({
             success: false,
             message: "Terjadi kesalahan saat mengambil profil admin",
-            error: error.message
-        });
-    }
-});
-
-// logout admin
-export const logOutAdmin = errorHandleMiddleware(async (req, res, next) => {
-    try {
-        res.status(200).cookie("adminToken", null, {
-            expires: new Date(Date.now()),
-            httpOnly: true,
-        }).send({
-            success: true,
-            message: "Logout admin berhasil"
-        })
-    } catch (error) {
-        console.log(error);
-        res.status(500).json({
-            success: false,
-            message: "Terjadi kesalahan saat logout admin",
             error: error.message
         });
     }
@@ -270,17 +242,28 @@ export const deleteUser = errorHandleMiddleware(async (req, res, next) => {
 // Logout user
 export const logoutUser = errorHandleMiddleware(async (req, res, next) => {
     try {
-        res.clearCookie("token");
+        let cookieName;
+        if (req.user.role === "Admin") cookieName = "adminToken";
+        else if (req.user.role === "Kasir") cookieName = "kasirToken";
+        else cookieName = "token";
+
+        res.clearCookie(cookieName, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production",
+            sameSite: "Strict",
+            path: "/",
+        });
+
         res.status(200).json({
             success: true,
-            message: "Logout berhasil"
+            message: "Logout berhasil",
         });
     } catch (error) {
         console.log(error);
         res.status(500).json({
             success: false,
             message: "Terjadi kesalahan saat logout",
-            error: error.message
+            error: error.message,
         });
     }
 });

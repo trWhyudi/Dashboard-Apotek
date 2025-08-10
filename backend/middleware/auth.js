@@ -5,7 +5,7 @@ import { errorHandleMiddleware } from "../middleware/errorHandleMiddleware.js";
 
 export const isAuthenticated = async (req, res, next) => {
     const token = req.cookies.adminToken || 
-    req.cookies.pelangganToken;
+    req.cookies.KasirToken;
 
     if (!token) {
         return next(new ErrorHandler("User tidak terautentikasi", 401));
@@ -44,18 +44,18 @@ export const adminTokenAuth = errorHandleMiddleware(async (req, res, next) => {
     }
 });
 
-// Middleware Pelanggan Role
-export const pelangganTokenAuth = errorHandleMiddleware(async (req, res, next) => {
-    const token = req.cookies.pelangganToken;
+// Middleware Kasir Role
+export const kasirTokenAuth = errorHandleMiddleware(async (req, res, next) => {
+    const token = req.cookies.kasirToken;
     if (!token) {
-        return next(new ErrorHandler("Pelanggan tidak terautentikasi", 401));
+        return next(new ErrorHandler("Kasir tidak terautentikasi", 401));
     }
 
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
         req.user = await User.findById(decoded.id);
 
-        if (!req.user || req.user.role !== "Pelanggan") {
+        if (!req.user || req.user.role !== "Kasir") {
             return next(new ErrorHandler("User tidak diizinkan", 403));
         }
         next();

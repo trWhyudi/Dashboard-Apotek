@@ -18,12 +18,12 @@ const MedicineSelection = ({ medicines, onAddMedicine }) => {
 
   return (
     <div>
-      <h2 className="text-lg font-medium text-gray-900 mb-4">Select Medicines</h2>
+      <h2 className="text-lg font-medium text-gray-900 mb-4">Pilih Obat</h2>
       
       <div className="mb-4">
         <input
           type="text"
-          placeholder="Search medicines..."
+          placeholder="Cari obat..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
@@ -50,7 +50,7 @@ const MedicineSelection = ({ medicines, onAddMedicine }) => {
             ))}
           </ul>
         ) : (
-          <p className="text-gray-500 text-center py-4">No medicines found</p>
+          <p className="text-gray-500 text-center py-4">Obat tidak ditemukan</p>
         )}
       </div>
 
@@ -58,7 +58,7 @@ const MedicineSelection = ({ medicines, onAddMedicine }) => {
         <div className="flex items-center space-x-4">
           <div className="flex-1">
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Quantity (Max: {selectedMedicine.stock})
+              Jumlah (Max: {selectedMedicine.stock})
             </label>
             <input
               type="number"
@@ -73,7 +73,7 @@ const MedicineSelection = ({ medicines, onAddMedicine }) => {
             onClick={handleAdd}
             className="mt-6 px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700"
           >
-            Add
+            Tambah
           </button>
         </div>
       )}

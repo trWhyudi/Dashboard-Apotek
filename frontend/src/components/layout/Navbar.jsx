@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useState, useRef, useEffect } from 'react';
 import { FaChevronDown } from 'react-icons/fa';
@@ -6,7 +6,7 @@ import { IoMdLogOut } from "react-icons/io";
 import { CgProfile } from "react-icons/cg";
 
 const Navbar = () => {
-  const { user, logout } = useAuth();
+  const { user, logout, logoutLoading } = useAuth();
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
 
@@ -54,10 +54,11 @@ const Navbar = () => {
 
                       <button
                         onClick={logout}
-                        className="flex items-center gap-2 w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100"
+                        disabled={logoutLoading}
+                        className={`flex items-center gap-2 w-full text-left px-4 py-2 text-sm ${logoutLoading ? 'text-gray-400' : 'text-red-600 hover:bg-gray-100'}`}
                       >
                         <IoMdLogOut className="text-lg" />
-                        Logout
+                        {logoutLoading ? 'Logging out...' : 'Logout'}
                       </button>
                     </div>
                   </div>

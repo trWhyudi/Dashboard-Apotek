@@ -1,5 +1,5 @@
 import express from 'express';
-import { createUser, loginUser, createAdmin, getSingleAdmin, getAdminProfile, logOutAdmin, getCurrentUser, getAllUser, updateUser, deleteUser, forgotPassword, resetPassword, logoutUser } from '../controllers/userController.js';
+import { createUser, loginUser, createAdmin, getSingleAdmin, getAdminProfile, getCurrentUser, getAllUser, updateUser, deleteUser, forgotPassword, resetPassword, logoutUser } from '../controllers/userController.js';
 import { adminTokenAuth, isAuthenticated } from '../middleware/auth.js';
 
 const router = express.Router();
@@ -12,8 +12,6 @@ router.post('/login-user', loginUser);
 router.get('/single-admin/:id', adminTokenAuth, getSingleAdmin);
 // get admin profile
 router.get('/admin-profile', isAuthenticated, adminTokenAuth, getAdminProfile);
-// Logout admin
-router.get('/logout-admin', isAuthenticated, adminTokenAuth, logOutAdmin);
 // Create user
 router.post('/create-user', createUser);
 // get current user

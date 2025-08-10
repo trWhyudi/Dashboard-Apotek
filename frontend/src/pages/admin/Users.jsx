@@ -46,10 +46,10 @@ const AdminUsers = () => {
   };
 
   const headers = [
-    { key: 'name', label: 'Name' },
+    { key: 'name', label: 'Nama' },
     { key: 'email', label: 'Email' },
     { key: 'role', label: 'Role' },
-    { key: 'actions', label: 'Actions' },
+    { key: 'actions', label: 'Aksi' },
   ];
 
   const tableData = users.map((user) => ({
@@ -57,9 +57,9 @@ const AdminUsers = () => {
     actions: (
       <button
         onClick={() => handleDelete(user._id)}
-        className="text-red-600 hover:text-red-900"
+        className="px-4 py-1.5 rounded-md border border-red-500 text-red-600 font-medium text-sm hover:bg-red-500 hover:text-white transition duration-200 shadow-sm hover:shadow-md"
       >
-        Delete
+        Hapus
       </button>
     ),
   }));
@@ -69,9 +69,9 @@ const AdminUsers = () => {
   }
 
   return (
-    <div className="ml-64 pt-16 p-6">
+    <div className="ml-64 pt-16 p-6 mt-8">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold text-gray-800">Users List</h1>
+        <h1 className="text-2xl font-bold text-indigo-800">List Pengguna</h1>
       </div>
 
       <div className="bg-white p-6 rounded-lg shadow">

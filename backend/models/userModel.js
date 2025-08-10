@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
+import crypto from "crypto";
 
 const userSchema = new mongoose.Schema({
     name: {
@@ -20,12 +21,12 @@ const userSchema = new mongoose.Schema({
     },
     role: {
         type: String,
-        enum: ['Admin', 'Pelanggan'],
-        default: 'Pelanggan',
+        enum: ['Admin', 'Kasir'],
+        default: 'Kasir',
         required: true,
     },
     resetPasswordToken: String,
-    resetPasswordExpires: Date,
+    resetPasswordExpire: Date,
 });
 
 // hash password

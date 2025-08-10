@@ -15,7 +15,7 @@ const TransactionSummary = ({
 
   return (
     <div>
-      <h2 className="text-lg font-medium text-gray-900 mb-4">Transaction Summary</h2>
+      <h2 className="text-lg font-medium text-gray-900 mb-4">Summary</h2>
       
       <div className="mb-4 max-h-64 overflow-y-auto">
         {items.length > 0 ? (
@@ -45,7 +45,7 @@ const TransactionSummary = ({
             ))}
           </ul>
         ) : (
-          <p className="text-gray-500 text-center py-4">No items added</p>
+          <p className="text-gray-500 text-center py-4">Tidak ada item</p>
         )}
       </div>
 
@@ -55,7 +55,7 @@ const TransactionSummary = ({
           <span>Rp {total.toLocaleString()}</span>
         </div>
         <div className="flex justify-between mb-2">
-          <span className="font-medium">Tax (0%):</span>
+          <span className="font-medium">Pajak (0%):</span>
           <span>Rp 0</span>
         </div>
         <div className="flex justify-between font-bold text-lg mb-4">
@@ -65,7 +65,7 @@ const TransactionSummary = ({
 
         <div className="mb-4">
           <label className="block text-sm font-medium text-gray-700 mb-1">
-            Payment Amount (Rp)
+            Jumlah Pembayaran:
           </label>
           <input
             type="number"
@@ -77,7 +77,7 @@ const TransactionSummary = ({
         </div>
 
         <div className="flex justify-between mb-6">
-          <span className="font-medium">Change:</span>
+          <span className="font-medium">Kembalian:</span>
           <span>Rp {calculateChange().toLocaleString()}</span>
         </div>
 
@@ -88,7 +88,7 @@ const TransactionSummary = ({
             loading || items.length === 0 ? 'opacity-50 cursor-not-allowed' : ''
           }`}
         >
-          {loading ? 'Processing...' : 'Complete Transaction'}
+          {loading ? 'Memproses...' : 'Selesaikan Transaksi'}
         </button>
       </div>
     </div>

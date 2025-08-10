@@ -23,16 +23,16 @@ const TransactionTable = ({ transactions, onCancel }) => {
         <thead className="bg-gray-50">
           <tr>
             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-              Transaction #
+              ID Transaksi
             </th>
             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-              Date
+              Tanggal
             </th>
             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-              Cashier
+              Kasir
             </th>
             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-              Items
+              Barang
             </th>
             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
               Total
@@ -41,7 +41,7 @@ const TransactionTable = ({ transactions, onCancel }) => {
               Status
             </th>
             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-              Actions
+              Aksi
             </th>
           </tr>
         </thead>
@@ -84,7 +84,7 @@ const TransactionTable = ({ transactions, onCancel }) => {
                       to={`/admin/transactions/${transaction._id}`}
                       className="text-indigo-600 hover:text-indigo-900"
                     >
-                      View
+                      Detail
                     </Link>
                     {transaction.status === 'completed' && (
                       <button

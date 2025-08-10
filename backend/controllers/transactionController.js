@@ -297,7 +297,7 @@ export const cancelTransaction = errorHandleMiddleware(async (req, res, next) =>
             const medicine = await Medicine.findById(item.medicine);
             if (medicine) {
                 medicine.stock += item.quantity;
-                await medicine.save();
+                await medicine.save({ validateBeforeSave: false });
             }
         }
 

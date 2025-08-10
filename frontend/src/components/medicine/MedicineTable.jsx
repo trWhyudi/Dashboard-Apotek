@@ -38,7 +38,7 @@ const MedicineTable = ({ medicines, onDelete }) => {
                   <img
                     src={`http://localhost:8001${medicine.image}`}
                     alt={medicine.name}
-                    className="h-10 w-10 rounded-full object-cover"
+                    className="h-10 w-10 rounded-md object-cover"
                   />
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
@@ -62,7 +62,7 @@ const MedicineTable = ({ medicines, onDelete }) => {
                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                   <div className="flex space-x-2">
                     <Link
-                      to={`/admin/medicines/edit/${medicine._id}`}
+                      to={`/medicines/edit/${medicine._id}`}
                       className="text-indigo-600 hover:text-indigo-900"
                     >
                       Edit
@@ -71,7 +71,7 @@ const MedicineTable = ({ medicines, onDelete }) => {
                       onClick={() => onDelete(medicine._id)}
                       className="text-red-600 hover:text-red-900"
                     >
-                      Delete
+                      Hapus
                     </button>
                   </div>
                 </td>

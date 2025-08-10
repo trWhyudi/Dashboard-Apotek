@@ -34,7 +34,7 @@ const MedicineForm = ({ isEdit = false }) => {
             expired: new Date(medicine.expired).toISOString().split('T')[0],
             image: null
           });
-          setPreviewImage(medicine.image);
+          setPreviewImage(`http://localhost:8001${medicine.image}`);
         } catch (err) {
           console.error('Error fetching medicine:', err);
         }
@@ -101,7 +101,7 @@ const MedicineForm = ({ isEdit = false }) => {
         showConfirmButton: false,
       });
 
-      navigate('/admin/medicines');
+      navigate('/medicines');
     } catch (err) {
       setError(err.response?.data?.message || 'An error occurred');
       console.error('Error submitting form:', err);
@@ -112,8 +112,8 @@ const MedicineForm = ({ isEdit = false }) => {
 
   return (
     <div className="max-w-3xl mx-auto bg-white p-6 rounded-lg shadow">
-      <h2 className="text-xl font-bold mb-6">
-        {isEdit ? 'Edit Medicine' : 'Add New Medicine'}
+      <h2 className="text-xl font-bold mb-6 text-indigo-500">
+        {isEdit ? 'Edit Data Obat' : 'Tambah Data Obat'}
       </h2>
       
       {error && (
@@ -253,8 +253,8 @@ const MedicineForm = ({ isEdit = false }) => {
         <div className="mt-6 flex justify-end space-x-3">
           <button
             type="button"
-            onClick={() => navigate('/admin/medicines')}
-            className="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50"
+            onClick={() => navigate('/medicines')}
+            className="px-4 py-2 border border-indigo-300 rounded-md text-sm font-medium text-indigo-700 hover:bg-indigo-50"
           >
             Cancel
           </button>

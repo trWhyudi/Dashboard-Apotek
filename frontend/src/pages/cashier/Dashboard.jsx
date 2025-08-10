@@ -7,7 +7,7 @@ import { FaNotesMedical } from "react-icons/fa";
 import { FaMoneyBillTransfer } from "react-icons/fa6";
 import { BiSolidReport } from "react-icons/bi";
 
-const AdminDashboard = () => {
+const CashierDashboard = () => {
   const [stats, setStats] = useState({
     users: 0,
     medicines: 0,
@@ -54,7 +54,7 @@ const AdminDashboard = () => {
 
   return (
     <div className="ml-64 pt-16 p-6 mt-8">
-      <h1 className="text-2xl font-bold text-indigo-800 mb-6">Admin Dashboard</h1>
+      <h1 className="text-2xl font-bold text-indigo-800 mb-6">Cashier Dashboard</h1>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         <Card
@@ -97,4 +97,4 @@ const AdminDashboard = () => {
   );
 };
 
-export default AdminDashboard;
+export default CashierDashboard;

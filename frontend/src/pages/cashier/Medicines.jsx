@@ -1,4 +1,3 @@
-// AdminMedicines.jsx
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import api from '../../utils/api';
@@ -13,11 +12,10 @@ const AdminMedicines = () => {
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
-  const medicinesPerPage = 10;
+  const [medicinesPerPage] = useState(10);
 
   useEffect(() => {
     const fetchMedicines = async () => {
-      setLoading(true);
       try {
         let response;
         if (searchTerm) {
@@ -25,6 +23,7 @@ const AdminMedicines = () => {
         } else {
           response = await api.get('/medicine/all-medicines');
         }
+        console.log('API Response data:', response.data);
         setMedicines(response.data.medicines);
       } catch (error) {
         console.error('Error fetching medicines:', error);
@@ -44,7 +43,7 @@ const AdminMedicines = () => {
 
   const handleSearch = (term) => {
     setSearchTerm(term);
-    setCurrentPage(1);
+    setCurrentPage(1); // Reset to first page on new search
   };
 
   const handleDelete = async (id) => {
@@ -80,26 +79,25 @@ const AdminMedicines = () => {
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold text-indigo-800">Data Obat</h1>
         <Link
-          to="/medicines/create"
+          to="/admin/medicines/create"
           className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 flex items-center"
         >
-          <IoMdAddCircleOutline className="mr-1" size={20} />
+          <span className="material-icons-outlined mr-1"> <IoMdAddCircleOutline /></span>
           Tambah Obat
         </Link>
       </div>
 
-      <div className="mb-6 max-w-md">
-        <SearchBar
-          placeholder="Cari obat berdasarkan nama..."
+      <div className="mb-6">
+        <SearchBar 
+          placeholder="Cari obat berdasarkan nama..." 
           onSearch={handleSearch}
-          value={searchTerm}
         />
       </div>
 
       <div className="bg-white p-6 rounded-lg shadow">
-        <MedicineTable
-          medicines={currentMedicines}
-          onDelete={handleDelete}
+        <MedicineTable 
+          medicines={currentMedicines} 
+          onDelete={handleDelete} 
         />
         {medicines.length > 0 && (
           <Pagination

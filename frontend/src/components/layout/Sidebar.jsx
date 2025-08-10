@@ -1,30 +1,29 @@
 import { NavLink } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
-import { FaUser } from "react-icons/fa";
+import { FaUser, FaNotesMedical, FaUserEdit } from "react-icons/fa";
 import { MdSpaceDashboard } from "react-icons/md";
-import { FaNotesMedical } from "react-icons/fa";
 import { FaMoneyBillTransfer } from "react-icons/fa6";
 import { BiSolidReport } from "react-icons/bi";
-import { FaUserEdit } from "react-icons/fa";
 
 const Sidebar = () => {
   const { user } = useAuth();
+  if (!user) return null;
 
-  const adminLinks = [
-    { name: 'Dashboard', path: '/admin/dashboard', icon: <MdSpaceDashboard color='#3B82F6'/> },
-    { name: 'Users', path: '/admin/users', icon: <FaUser color='#3B82F6'/> },
-    { name: 'Medicines', path: '/admin/medicines', icon: <FaNotesMedical color='#3B82F6'/> },
-    { name: 'Transactions', path: '/admin/transactions', icon: <FaMoneyBillTransfer color='#3B82F6'/> },
-    { name: 'Reports', path: '/admin/reports', icon: <BiSolidReport color='#3B82F6'/> },
-    { name: 'Profile', path: '/admin/profile', icon: <FaUserEdit color='#3B82F6'/> },
+  const commonLinks = [
+    { name: 'Dashboard', path: '/dashboard', icon: <MdSpaceDashboard color='#4F46E5' /> },
+    { name: 'Profil', path: '/profile', icon: <FaUserEdit color='#4F46E5' /> },
+    { name: 'Obat', path: '/medicines', icon: <FaNotesMedical color='#4F46E5' /> },
+    { name: 'Transaksi', path: '/transactions', icon: <FaMoneyBillTransfer color='#4F46E5' /> },
   ];
 
-  const customerLinks = [
-    { name: 'Dashboard', path: '/customer/dashboard', icon: 'dashboard' },
-    { name: 'Profile', path: '/customer/profile', icon: 'person' },
+  const adminOnlyLinks = [
+    { name: 'Pengguna', path: '/users', icon: <FaUser color='#4F46E5' /> },
+    { name: 'Laporan', path: '/reports', icon: <BiSolidReport color='#4F46E5' /> },
   ];
 
-  const links = user?.role === 'Admin' ? adminLinks : customerLinks;
+  const links = user.role === 'Admin'
+    ? [...commonLinks, ...adminOnlyLinks]
+    : commonLinks;
 
   return (
     <div className="hidden md:flex md:flex-shrink-0">
@@ -43,9 +42,7 @@ const Sidebar = () => {
                   }`
                 }
               >
-                <span className="material-icons-outlined mr-3 text-lg">
-                  {link.icon}
-                </span>
+                <span className="mr-3 text-lg">{link.icon}</span>
                 {link.name}
               </NavLink>
             ))}

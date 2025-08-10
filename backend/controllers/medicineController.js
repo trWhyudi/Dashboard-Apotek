@@ -163,7 +163,7 @@ export const updateMedicine = errorHandleMiddleware(async (req, res, next) => {
             return next(new ErrorHandler("Obat tidak ditemukan", 404));
         }
 
-        const { name, description, price, stock, expired } = req.body;
+        const { name, description, category, price, stock, expired } = req.body;
 
         if (!name || !description || !price || !stock || !expired) {
             return next(new ErrorHandler("Semua field harus diisi", 400));
@@ -171,6 +171,7 @@ export const updateMedicine = errorHandleMiddleware(async (req, res, next) => {
 
         medicine.name = name;
         medicine.description = description;
+        medicine.category = category;
         medicine.price = price;
         medicine.stock = stock;
         medicine.expired = expired;
@@ -183,8 +184,8 @@ export const updateMedicine = errorHandleMiddleware(async (req, res, next) => {
             const oldImagePath = path.join(process.cwd(), medicine.image);
             
             try {
-                await fs.access(oldImagePath); // Check if file exists
-                await fs.unlink(oldImagePath); // Delete the file
+                await fs.access(oldImagePath);
+                await fs.unlink(oldImagePath);
             } catch (error) {
                 console.log('Old image file not found:', error);
             }
