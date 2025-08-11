@@ -27,9 +27,11 @@ const AdminTransactions = () => {
       try {
         setLoading(true);
         let response;
-        
+
         if (dateRange.startDate && dateRange.endDate) {
-          response = await api.get(`/transaction/transactions-by-date?startDate=${formatDate(dateRange.startDate)}&endDate=${formatDate(dateRange.endDate)}`);
+          response = await api.get(
+            `/transaction/transactions-by-date?startDate=${formatDate(dateRange.startDate)}&endDate=${formatDate(dateRange.endDate)}`
+          );
           setStats({
             totalAmount: response.data.totalAmount,
             count: response.data.count
@@ -41,7 +43,7 @@ const AdminTransactions = () => {
             count: response.data.transactions.length
           });
         }
-        
+
         setTransactions(response.data.transactions);
       } catch (error) {
         console.error('Error fetching transactions:', error);
@@ -73,24 +75,28 @@ const AdminTransactions = () => {
       text: 'Apakah Anda yakin ingin membatalkan transaksi ini?',
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonColor: '#d33',
-      cancelButtonColor: '#3085d6',
+      confirmButtonColor: '#dc2626',
+      cancelButtonColor: '#4f46e5',
       confirmButtonText: 'Ya, batalkan',
-      cancelButtonText: 'Batal'
+      cancelButtonText: 'Batal',
+      customClass: {
+        confirmButton: 'font-semibold',
+        cancelButton: 'font-semibold'
+      }
     });
 
     if (result.isConfirmed) {
       try {
         await api.put(`/transaction/cancel-transaction/${id}`);
-        setTransactions(transactions.map(t =>
-          t._id === id ? { ...t, status: 'cancelled' } : t
-        ));
+        setTransactions((prev) =>
+          prev.map(t => (t._id === id ? { ...t, status: 'cancelled' } : t))
+        );
         Swal.fire({
           title: 'Dibatalkan!',
           text: 'Transaksi berhasil dibatalkan.',
           icon: 'success',
           timer: 2000,
-          showConfirmButton: false
+          showConfirmButton: false,
         });
       } catch (error) {
         console.error('Error cancelling transaction:', error);
@@ -100,36 +106,41 @@ const AdminTransactions = () => {
   };
 
   if (loading) {
-    return <div className="flex justify-center items-center h-screen">Loading...</div>;
+    return (
+      <div className="flex justify-center items-center h-screen bg-gray-50">
+        <div className="loader ease-linear rounded-full border-8 border-t-8 border-gray-300 h-16 w-16"></div>
+      </div>
+    );
   }
 
   return (
-    <div className="ml-64 pt-16 p-6 mt-8">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold text-indigo-800">Data Transaksi</h1>
+    <main className="ml-64 pt-16 p-8 mt-8 bg-gray-50 min-h-screen">
+      <header className="flex justify-between items-center mb-8">
+        <h1 className="text-3xl font-extrabold text-indigo-900">Data Transaksi</h1>
         <Link
-          to="/admin/transactions/create"
-          className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 flex items-center"
+          to="/transactions/create"
+          className="inline-flex items-center px-5 py-2 bg-indigo-600 text-white rounded-lg shadow-md hover:bg-indigo-700 transition"
         >
-          <span className="material-icons-outlined mr-1"><IoMdAddCircleOutline /></span>
+          <IoMdAddCircleOutline className="mr-2 text-xl" />
           Tambah Transaksi
         </Link>
-      </div>
+      </header>
 
-      <div className="mb-6 bg-white p-4 rounded-lg shadow">
-        <div className="flex justify-between items-center mb-4">
-          <h2 className="text-lg font-semibold">Filter Transaksi</h2>
+      <section className="mb-6 bg-white p-6 rounded-xl shadow-md">
+        <div className="flex justify-between items-center mb-5">
+          <h2 className="text-xl font-semibold text-gray-800">Filter Transaksi</h2>
           <div className="text-sm text-gray-600">
-            Menampilkan {stats.count} transaksi ({formatCurrency(stats.totalAmount)})
+            Menampilkan <span className="font-semibold">{stats.count}</span> transaksi (
+            <span className="font-semibold">{formatCurrency(stats.totalAmount)}</span>)
           </div>
         </div>
         <DateRangePicker onChange={handleDateChange} value={dateRange} />
-      </div>
+      </section>
 
-      <div className="bg-white p-6 rounded-lg shadow">
-        <TransactionTable 
-          transactions={currentTransactions} 
-          onCancel={handleCancel} 
+      <section className="bg-white p-6 rounded-xl shadow-md">
+        <TransactionTable
+          transactions={currentTransactions}
+          onCancel={handleCancel}
         />
         {transactions.length > 0 && (
           <Pagination
@@ -138,8 +149,8 @@ const AdminTransactions = () => {
             onPageChange={setCurrentPage}
           />
         )}
-      </div>
-    </div>
+      </section>
+    </main>
   );
 };
 

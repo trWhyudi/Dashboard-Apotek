@@ -7,7 +7,7 @@ import Pagination from '../../components/ui/Pagination';
 import { IoMdAddCircleOutline } from "react-icons/io";
 import Swal from 'sweetalert2';
 
-const AdminMedicines = () => {
+const CashierMedicines = () => {
   const [medicines, setMedicines] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
@@ -79,7 +79,7 @@ const AdminMedicines = () => {
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold text-indigo-800">Data Obat</h1>
         <Link
-          to="/admin/medicines/create"
+          to="/medicines/create"
           className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 flex items-center"
         >
           <span className="material-icons-outlined mr-1"> <IoMdAddCircleOutline /></span>
@@ -111,4 +111,4 @@ const AdminMedicines = () => {
   );
 };
 
-export default AdminMedicines;
+export default CashierMedicines;

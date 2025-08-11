@@ -46,7 +46,7 @@ const GenerateReport = () => {
         endDate: formatDate(formData.endDate)
       });
 
-      navigate(`/admin/reports/${response.data.data.reportId}`);
+      navigate(`/reports/${response.data.data.reportId}`);
     } catch (err) {
       setError(err.response?.data?.message || err.message || 'Failed to generate report');
     } finally {
@@ -89,7 +89,7 @@ const GenerateReport = () => {
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold text-indigo-800">Buat Laporan Baru</h1>
         <button
-          onClick={() => navigate('/admin/reports')}
+          onClick={() => navigate('/reports')}
           className="px-4 py-2 border border-indigo-300 rounded-md text-sm font-medium text-indigo-700 hover:bg-indigo-50"
         >
           Cancel

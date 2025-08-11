@@ -27,17 +27,21 @@ const AdminUsers = () => {
       text: "Data yang dihapus tidak dapat dikembalikan!",
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
+      confirmButtonColor: '#4f46e5',
+      cancelButtonColor: '#ef4444',
       confirmButtonText: 'Ya, hapus!',
-      cancelButtonText: 'Batal'
+      cancelButtonText: 'Batal',
+      customClass: {
+        confirmButton: 'font-semibold',
+        cancelButton: 'font-semibold'
+      }
     });
 
     if (result.isConfirmed) {
       try {
         await api.delete(`/user/delete-user/${id}`);
-        setUsers(users.filter(user => user._id !== id));
-        Swal.fire('Deleted!', 'Pengguna berhasil dihapus.', 'success');
+        setUsers((prev) => prev.filter(user => user._id !== id));
+        Swal.fire('Berhasil!', 'Pengguna berhasil dihapus.', 'success');
       } catch (error) {
         console.error('Error deleting user:', error);
         Swal.fire('Error!', 'Gagal menghapus pengguna.', 'error');
@@ -49,35 +53,41 @@ const AdminUsers = () => {
     { key: 'name', label: 'Nama' },
     { key: 'email', label: 'Email' },
     { key: 'role', label: 'Role' },
-    { key: 'actions', label: 'Aksi' },
+    { key: 'actions', label: 'Aksi', className: 'text-center' },
   ];
 
-  const tableData = users.map((user) => ({
+  const tableData = users.map(user => ({
     ...user,
     actions: (
       <button
         onClick={() => handleDelete(user._id)}
-        className="px-4 py-1.5 rounded-md border border-red-500 text-red-600 font-medium text-sm hover:bg-red-500 hover:text-white transition duration-200 shadow-sm hover:shadow-md"
+        className="px-4 py-2 text-sm font-medium rounded-md border border-red-500 text-red-600 hover:bg-red-500 hover:text-white transition shadow-sm hover:shadow-md"
+        aria-label={`Hapus pengguna ${user.name}`}
+        title={`Hapus pengguna ${user.name}`}
       >
         Hapus
       </button>
-    ),
+    )
   }));
 
   if (loading) {
-    return <div className="flex justify-center items-center h-screen">Loading...</div>;
+    return (
+      <div className="flex justify-center items-center h-screen bg-gray-50">
+        <div className="loader ease-linear rounded-full border-8 border-t-8 border-gray-300 h-16 w-16"></div>
+      </div>
+    );
   }
 
   return (
-    <div className="ml-64 pt-16 p-6 mt-8">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold text-indigo-800">List Pengguna</h1>
-      </div>
+    <main className="ml-64 pt-16 p-8 mt-8 bg-gray-50 min-h-screen">
+      <header className="flex justify-between items-center mb-8">
+        <h1 className="text-3xl font-extrabold text-indigo-900">List Pengguna</h1>
+      </header>
 
-      <div className="bg-white p-6 rounded-lg shadow">
+      <section className="bg-white p-6 rounded-xl shadow-md">
         <Table headers={headers} data={tableData} />
-      </div>
-    </div>
+      </section>
+    </main>
   );
 };
 

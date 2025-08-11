@@ -81,7 +81,7 @@ const TransactionTable = ({ transactions, onCancel }) => {
                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                   <div className="flex space-x-2">
                     <Link
-                      to={`/admin/transactions/${transaction._id}`}
+                      to={`/transactions/${transaction._id}`}
                       className="text-indigo-600 hover:text-indigo-900"
                     >
                       Detail

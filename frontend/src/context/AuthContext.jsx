@@ -33,7 +33,9 @@ export const AuthProvider = ({ children }) => {
       const response = await api.post('/user/login-user', { email, password });
       const loggedInUser = response.data.user;
       setUser(loggedInUser);
-      navigate(loggedInUser.role === 'Admin' ? '/admin/dashboard' : '/cashier/dashboard');
+      
+      navigate('/dashboard');
+      
       return { success: true };
     } catch (error) {
       return { success: false, message: error.response?.data?.message || 'Login failed' };

@@ -5,7 +5,7 @@ import { errorHandleMiddleware } from "../middleware/errorHandleMiddleware.js";
 
 export const isAuthenticated = async (req, res, next) => {
     const token = req.cookies.adminToken || 
-    req.cookies.KasirToken;
+    req.cookies.kasirToken;
 
     if (!token) {
         return next(new ErrorHandler("User tidak terautentikasi", 401));

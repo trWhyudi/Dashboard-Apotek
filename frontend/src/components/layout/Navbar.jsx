@@ -27,7 +27,7 @@ const Navbar = () => {
       <div className="px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16 items-center">
           <Link to="/" className="text-xl font-bold text-indigo-600">
-            Apoteku
+            Apotek Munggaran
           </Link>
 
           <div className="flex items-center space-x-4">
@@ -45,11 +45,11 @@ const Navbar = () => {
                   <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg z-50">
                     <div className="py-1">
                       <Link
-                        to={`/${user.role.toLowerCase()}/profile`}
+                        to="/profile"
                         className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                       >
                         <CgProfile className="text-lg" />
-                        Profile
+                        Profil
                       </Link>
 
                       <button

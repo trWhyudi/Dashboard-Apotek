@@ -84,7 +84,7 @@ const CreateTransaction = () => {
         paymentAmount: parseFloat(paymentAmount)
       });
 
-      navigate(`/admin/transactions/${response.data.transaction._id}`, {
+      navigate(`/transactions/${response.data.transaction._id}`, {
         state: { changeAmount: response.data.changeAmount }
       });
     } catch (err) {
@@ -100,10 +100,10 @@ const CreateTransaction = () => {
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold text-indigo-800">Buat Transaksi Baru</h1>
         <button
-          onClick={() => navigate('/admin/transactions')}
+          onClick={() => navigate('/transactions')}
           className="px-4 py-2 border border-indigo-300 rounded-md text-sm font-medium text-indigo-700 hover:bg-indigo-50"
         >
-          Cancel
+          Kembali
         </button>
       </div>
 

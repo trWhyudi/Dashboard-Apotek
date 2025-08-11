@@ -81,7 +81,7 @@ const ReportTable = ({ reports, onDelete, onDownload, onSort, sortConfig }) => {
                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                   <div className="flex space-x-2">
                     <Link
-                      to={`/admin/reports/${report._id}`}
+                      to={`/reports/${report._id}`}
                       className="text-indigo-600 hover:text-indigo-900"
                     >
                       Detail

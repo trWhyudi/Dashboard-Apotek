@@ -1,4 +1,3 @@
-// AdminMedicines.jsx
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import api from '../../utils/api';
@@ -20,8 +19,8 @@ const AdminMedicines = () => {
       setLoading(true);
       try {
         let response;
-        if (searchTerm) {
-          response = await api.get(`/medicine/search-medicines?name=${searchTerm}`);
+        if (searchTerm.trim()) {
+          response = await api.get(`/medicine/search-medicines?name=${encodeURIComponent(searchTerm)}`);
         } else {
           response = await api.get('/medicine/all-medicines');
         }
@@ -53,50 +52,58 @@ const AdminMedicines = () => {
       text: "Data yang dihapus tidak dapat dikembalikan!",
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
+      confirmButtonColor: '#4f46e5',
+      cancelButtonColor: '#dc2626',
       confirmButtonText: 'Ya, hapus!',
-      cancelButtonText: 'Batal'
+      cancelButtonText: 'Batal',
+      customClass: {
+        confirmButton: 'font-semibold',
+        cancelButton: 'font-semibold'
+      }
     });
 
     if (result.isConfirmed) {
       try {
         await api.delete(`/medicine/delete-medicine/${id}`);
-        setMedicines(medicines.filter(medicine => medicine._id !== id));
-        Swal.fire('Deleted!', 'The medicine has been deleted.', 'success');
+        setMedicines(prev => prev.filter(medicine => medicine._id !== id));
+        Swal.fire('Deleted!', 'Obat berhasil dihapus.', 'success');
       } catch (error) {
         console.error('Error deleting medicine:', error);
-        Swal.fire('Error!', 'Failed to delete the medicine.', 'error');
+        Swal.fire('Error!', 'Gagal menghapus obat.', 'error');
       }
     }
   };
 
   if (loading) {
-    return <div className="flex justify-center items-center h-screen">Loading...</div>;
+    return (
+      <div className="flex justify-center items-center h-screen bg-gray-50">
+        <div className="loader ease-linear rounded-full border-8 border-t-8 border-indigo-600 h-16 w-16"></div>
+      </div>
+    );
   }
 
   return (
-    <div className="ml-64 pt-16 p-6 mt-8">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold text-indigo-800">Data Obat</h1>
+    <main className="ml-64 pt-16 p-8 mt-8 bg-gray-50 min-h-screen">
+      <header className="flex justify-between items-center mb-8">
+        <h1 className="text-3xl font-extrabold text-indigo-900">Data Obat</h1>
         <Link
           to="/medicines/create"
-          className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 flex items-center"
+          className="inline-flex items-center px-5 py-2 bg-indigo-600 text-white rounded-lg shadow-md hover:bg-indigo-700 transition"
         >
-          <IoMdAddCircleOutline className="mr-1" size={20} />
+          <IoMdAddCircleOutline className="mr-2 text-xl" />
           Tambah Obat
         </Link>
-      </div>
+      </header>
 
-      <div className="mb-6 max-w-md">
+      <section className="mb-6 max-w-md">
         <SearchBar
           placeholder="Cari obat berdasarkan nama..."
           onSearch={handleSearch}
           value={searchTerm}
         />
-      </div>
+      </section>
 
-      <div className="bg-white p-6 rounded-lg shadow">
+      <section className="bg-white p-6 rounded-xl shadow-md">
         <MedicineTable
           medicines={currentMedicines}
           onDelete={handleDelete}
@@ -108,8 +115,8 @@ const AdminMedicines = () => {
             onPageChange={setCurrentPage}
           />
         )}
-      </div>
-    </div>
+      </section>
+    </main>
   );
 };
 

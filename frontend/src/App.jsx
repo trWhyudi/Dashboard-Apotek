@@ -10,7 +10,6 @@ import ForgotPassword from './pages/auth/ForgotPassword';
 import ResetPassword from './pages/auth/ResetPassword';
 import Profile from './pages/Profile';
 
-import AdminDashboard from './pages/admin/Dashboard';
 import AdminUsers from './pages/admin/Users';
 import AdminMedicines from './pages/admin/Medicines';
 import AdminMedicineForm from './pages/admin/MedicineFormPage';
@@ -22,14 +21,18 @@ import AdminReports from './pages/admin/Reports';
 import AdminReportDetail from './pages/admin/ReportDetail';
 import AdminGenerateReport from './pages/admin/GenerateReport';
 
-import CashierDashboard from './pages/cashier/Dashboard';
 import CashierMedicines from './pages/cashier/Medicines';
+import CashierMedicineForm from './pages/cashier/MedicineFormPage';
+import CashierEditMedicine from './pages/cashier/EditMedicinePage';
 import CashierTransactions from './pages/cashier/Transactions';
 import CashierCreateTransaction from './pages/cashier/CreateTransaction';
 import CashierTransactionDetail from './pages/cashier/TransactionDetail';
 
 import NotFound from './pages/NotFound';
 import PrivateRoute from './components/auth/PrivateRoute';
+import RedirectToDashboard from './pages/RedirectToDashboard';
+
+import DashboardPage from './pages/DashboardPage';
 
 const App = () => {
   return (
@@ -64,12 +67,12 @@ const AppContent = () => {
             <Route path="/reset-password/:token" element={<ResetPassword />} />
             <Route path="/profile" element={<PrivateRoute><Profile /></PrivateRoute>} />
 
-            {/* Admin Routes */}
+            {/* Private Routes */}
             <Route
               path="/dashboard"
               element={
-                <PrivateRoute allowedRoles={['Admin']}>
-                  <AdminDashboard />
+                <PrivateRoute allowedRoles={['Admin', 'Kasir']}>
+                  <DashboardPage />
                 </PrivateRoute>
               }
             />
@@ -84,7 +87,7 @@ const AppContent = () => {
             <Route
               path="/medicines"
               element={
-                <PrivateRoute allowedRoles={['Admin', 'Cashier']}>
+                <PrivateRoute allowedRoles={['Admin', 'Kasir']}>
                   {user?.role === 'Admin' ? <AdminMedicines /> : <CashierMedicines />}
                 </PrivateRoute>
               }
@@ -92,23 +95,23 @@ const AppContent = () => {
             <Route
               path="/medicines/create"
               element={
-                <PrivateRoute allowedRoles={['Admin']}>
-                  <AdminMedicineForm />
+                <PrivateRoute allowedRoles={['Admin', 'Kasir']}>
+                  {user?.role === 'Admin' ? <AdminMedicineForm /> : <CashierMedicineForm />}
                 </PrivateRoute>
               }
             />
             <Route
               path="/medicines/edit/:id"
               element={
-                <PrivateRoute allowedRoles={['Admin']}>
-                  <AdminEditMedicine />
+                <PrivateRoute allowedRoles={['Admin', 'Kasir']}>
+                  {user?.role === 'Admin' ? <AdminEditMedicine /> : <CashierEditMedicine />}
                 </PrivateRoute>
               }
             />
             <Route
               path="/transactions"
               element={
-                <PrivateRoute allowedRoles={['Admin', 'Cashier']}>
+                <PrivateRoute allowedRoles={['Admin', 'Kasir']}>
                   {user?.role === 'Admin' ? <AdminTransactions /> : <CashierTransactions />}
                 </PrivateRoute>
               }
@@ -116,7 +119,7 @@ const AppContent = () => {
             <Route
               path="/transactions/create"
               element={
-                <PrivateRoute allowedRoles={['Admin', 'Cashier']}>
+                <PrivateRoute allowedRoles={['Admin', 'Kasir']}>
                   {user?.role === 'Admin' ? <AdminCreateTransaction /> : <CashierCreateTransaction />}
                 </PrivateRoute>
               }
@@ -124,7 +127,7 @@ const AppContent = () => {
             <Route
               path="/transactions/:id"
               element={
-                <PrivateRoute allowedRoles={['Admin', 'Cashier']}>
+                <PrivateRoute allowedRoles={['Admin', 'Kasir']}>
                   {user?.role === 'Admin' ? <AdminTransactionDetail /> : <CashierTransactionDetail />}
                 </PrivateRoute>
               }
@@ -154,24 +157,12 @@ const AppContent = () => {
               }
             />
 
-            {/* Cashier Dashboard */}
-            <Route
-              path="/cashier/dashboard"
-              element={
-                <PrivateRoute allowedRoles={['Cashier']}>
-                  <CashierDashboard />
-                </PrivateRoute>
-              }
-            />
-
             {/* Redirect root to dashboard */}
             <Route
               path="/"
               element={
-                <PrivateRoute>
-                  {({ user }) => (
-                    <Navigate to={user?.role === 'Admin' ? '/dashboard' : '/cashier/dashboard'} replace />
-                  )}
+                <PrivateRoute allowedRoles={['Admin', 'Kasir']}>
+                  <RedirectToDashboard />
                 </PrivateRoute>
               }
             />

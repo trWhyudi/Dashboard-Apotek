@@ -68,7 +68,7 @@ const TransactionDetail = () => {
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-3xl font-bold text-indigo-800">Detail Transaksi</h1>
         <Link
-          to="/admin/transactions"
+          to="/transactions"
           className="px-4 py-2 border border-indigo-300 rounded-md text-sm font-medium text-indigo-700 hover:bg-indigo-50"
         >
           Kembali

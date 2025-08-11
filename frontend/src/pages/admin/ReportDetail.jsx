@@ -85,7 +85,7 @@ const ReportDetail = () => {
             Download PDF
           </button>
           <Link
-            to="/admin/reports"
+            to="/reports"
             className="px-4 py-2 border border-indigo-300 rounded-md text-sm font-medium text-indigo-700 hover:bg-indigo-50"
           >
             Kembali

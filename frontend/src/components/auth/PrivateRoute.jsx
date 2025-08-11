@@ -14,7 +14,7 @@ const PrivateRoute = ({ children, allowedRoles }) => {
     return <Navigate to="/" replace />;
   }
 
-  return typeof children === 'function' ? children({ user }) : children;
+  return children;
 };
 
 export default PrivateRoute;

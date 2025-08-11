@@ -80,7 +80,7 @@ const MedicineTable = ({ medicines, onDelete }) => {
           ) : (
             <tr>
               <td colSpan="6" className="px-6 py-4 text-center text-sm text-gray-500">
-                No medicines found
+                Tidak ada obat
               </td>
             </tr>
           )}

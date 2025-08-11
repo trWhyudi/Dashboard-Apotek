@@ -4,19 +4,19 @@ import { isAuthenticated } from '../middleware/auth.js';
 
 const router = express.Router();
 
-// Create medicine - only admin can create medicines
+// Create medicine
 router.post('/create-medicine', isAuthenticated, uploadMedicineImage, createMedicine);
-// Get all medicines - accessible to authenticated users
+// Get all medicines
 router.get('/all-medicines', isAuthenticated, getAllMedicines);
-// Get medicine by ID - accessible to authenticated users
+// Get medicine by ID
 router.get('/single-medicine/:id', isAuthenticated, getMedicineById);
-// Search medicines by name - accessible to authenticated users
+// Search medicines by name
 router.get('/search-medicines', isAuthenticated, searchMedicines);
-// get medicine categories summary - accessible to authenticated users
+// get medicine categories summary
 router.get('/categories-summary', isAuthenticated, getCategorySummary)
-// Update medicine - only admin can update medicines
+// Update medicine
 router.put('/update-medicine/:id', isAuthenticated, uploadMedicineImage, updateMedicine);
-// Delete medicine - only admin can delete medicines
+// Delete medicine
 router.delete('/delete-medicine/:id', isAuthenticated, deleteMedicine);
 
 export default router;
