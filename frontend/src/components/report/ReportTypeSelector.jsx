@@ -1,8 +1,8 @@
 const ReportTypeSelector = ({ selectedType, onChange }) => {
   const types = [
-    { id: 'daily', name: 'Daily Report', description: 'Summary of sales and transactions for a single day' },
-    { id: 'monthly', name: 'Monthly Report', description: 'Summary of sales and transactions for a month' },
-    { id: 'yearly', name: 'Yearly Report', description: 'Summary of sales and transactions for a year' }
+    { id: 'daily', name: 'Laporan Harian', description: 'Ringkasan penjualan dan transaksi untuk satu hari' },
+    { id: 'monthly', name: 'Laporan Bulanan', description: 'Ringkasan penjualan dan transaksi untuk satu bulan' },
+    { id: 'yearly', name: 'Laporan Tahunan', description: 'Ringkasan penjualan dan transaksi untuk satu tahun' }
   ];
 
   return (

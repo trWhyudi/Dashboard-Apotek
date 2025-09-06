@@ -65,21 +65,36 @@ const AppContent = () => {
             <Route path="/register" element={<Register />} />
             <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route path="/reset-password/:token" element={<ResetPassword />} />
-            <Route path="/profile" element={<PrivateRoute><Profile /></PrivateRoute>} />
+            <Route
+              path="/profile"
+              element={
+                <PrivateRoute>
+                  <Profile />
+                </PrivateRoute>
+              }
+            />
 
             {/* Private Routes */}
             <Route
               path="/dashboard"
               element={
-                <PrivateRoute allowedRoles={['Admin', 'Kasir']}>
+                <PrivateRoute allowedRoles={["Admin", "Kasir"]}>
                   <DashboardPage />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/cashier/dashboard"
+              element={
+                <PrivateRoute allowedRoles={["Kasir"]}>
+                  <DashboardPage /> {/* atau halaman khusus kasir */}
                 </PrivateRoute>
               }
             />
             <Route
               path="/users"
               element={
-                <PrivateRoute allowedRoles={['Admin']}>
+                <PrivateRoute allowedRoles={["Admin"]}>
                   <AdminUsers />
                 </PrivateRoute>
               }
@@ -87,55 +102,79 @@ const AppContent = () => {
             <Route
               path="/medicines"
               element={
-                <PrivateRoute allowedRoles={['Admin', 'Kasir']}>
-                  {user?.role === 'Admin' ? <AdminMedicines /> : <CashierMedicines />}
+                <PrivateRoute allowedRoles={["Admin", "Kasir"]}>
+                  {user?.role === "Admin" ? (
+                    <AdminMedicines />
+                  ) : (
+                    <CashierMedicines />
+                  )}
                 </PrivateRoute>
               }
             />
             <Route
               path="/medicines/create"
               element={
-                <PrivateRoute allowedRoles={['Admin', 'Kasir']}>
-                  {user?.role === 'Admin' ? <AdminMedicineForm /> : <CashierMedicineForm />}
+                <PrivateRoute allowedRoles={["Admin", "Kasir"]}>
+                  {user?.role === "Admin" ? (
+                    <AdminMedicineForm />
+                  ) : (
+                    <CashierMedicineForm />
+                  )}
                 </PrivateRoute>
               }
             />
             <Route
               path="/medicines/edit/:id"
               element={
-                <PrivateRoute allowedRoles={['Admin', 'Kasir']}>
-                  {user?.role === 'Admin' ? <AdminEditMedicine /> : <CashierEditMedicine />}
+                <PrivateRoute allowedRoles={["Admin", "Kasir"]}>
+                  {user?.role === "Admin" ? (
+                    <AdminEditMedicine />
+                  ) : (
+                    <CashierEditMedicine />
+                  )}
                 </PrivateRoute>
               }
             />
             <Route
               path="/transactions"
               element={
-                <PrivateRoute allowedRoles={['Admin', 'Kasir']}>
-                  {user?.role === 'Admin' ? <AdminTransactions /> : <CashierTransactions />}
+                <PrivateRoute allowedRoles={["Admin", "Kasir"]}>
+                  {user?.role === "Admin" ? (
+                    <AdminTransactions />
+                  ) : (
+                    <CashierTransactions />
+                  )}
                 </PrivateRoute>
               }
             />
             <Route
               path="/transactions/create"
               element={
-                <PrivateRoute allowedRoles={['Admin', 'Kasir']}>
-                  {user?.role === 'Admin' ? <AdminCreateTransaction /> : <CashierCreateTransaction />}
+                <PrivateRoute allowedRoles={["Admin", "Kasir"]}>
+                  {user?.role === "Admin" ? (
+                    <AdminCreateTransaction />
+                  ) : (
+                    <CashierCreateTransaction />
+                  )}
                 </PrivateRoute>
               }
             />
             <Route
               path="/transactions/:id"
               element={
-                <PrivateRoute allowedRoles={['Admin', 'Kasir']}>
-                  {user?.role === 'Admin' ? <AdminTransactionDetail /> : <CashierTransactionDetail />}
+                <PrivateRoute allowedRoles={["Admin", "Kasir"]}>
+                  {user?.role === "Admin" ? (
+                    <AdminTransactionDetail />
+                  ) : (
+                    <CashierTransactionDetail />
+                  )}
                 </PrivateRoute>
               }
             />
             <Route
               path="/reports"
               element={
-                <PrivateRoute allowedRoles={['Admin']}>
+                <PrivateRoute allowedRoles={["Admin"]}>
                   <AdminReports />
                 </PrivateRoute>
               }
@@ -143,7 +182,7 @@ const AppContent = () => {
             <Route
               path="/reports/:id"
               element={
-                <PrivateRoute allowedRoles={['Admin']}>
+                <PrivateRoute allowedRoles={["Admin"]}>
                   <AdminReportDetail />
                 </PrivateRoute>
               }
@@ -151,7 +190,7 @@ const AppContent = () => {
             <Route
               path="/reports/generate"
               element={
-                <PrivateRoute allowedRoles={['Admin']}>
+                <PrivateRoute allowedRoles={["Admin"]}>
                   <AdminGenerateReport />
                 </PrivateRoute>
               }
@@ -161,7 +200,7 @@ const AppContent = () => {
             <Route
               path="/"
               element={
-                <PrivateRoute allowedRoles={['Admin', 'Kasir']}>
+                <PrivateRoute allowedRoles={["Admin", "Kasir"]}>
                   <RedirectToDashboard />
                 </PrivateRoute>
               }

@@ -1,56 +1,81 @@
-import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import api from '../../utils/api';
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import api from "../../utils/api";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 const Register = () => {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError('');
+    setError("");
+
+    if (password !== confirmPassword) {
+      setError("Password dan konfirmasi password tidak cocok");
+      return;
+    }
+
+    if (password.length < 6) {
+      setError("Password harus minimal 6 karakter");
+      return;
+    }
+
     setLoading(true);
 
     try {
-      const response = await api.post('/user/create-user', { name, email, password });
+      const response = await api.post("/user/create-user", {
+        name,
+        email,
+        password,
+      });
       if (response.data.success) {
-        navigate('/login');
+        navigate("/login");
       } else {
-        setError(response.data.message || 'Gagal registrasi');
+        setError(response.data.message || "Gagal registrasi");
       }
     } catch (err) {
-      setError(err.response?.data?.message || 'Error saat registrasi');
+      setError(err.response?.data?.message || "Error saat registrasi");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4 py-12 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full bg-white p-10 rounded-xl shadow-lg space-y-6">
-        <h2 className="text-center text-3xl font-extrabold text-indigo-900">
-          Registrasi Akun Baru
-        </h2>
-
-        {error && (
-          <div
-            className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-md"
-            role="alert"
-          >
-            {error}
+    <div className="min-h-screen flex bg-gradient-to-br from-indigo-100 via-indigo-50 to-indigo-200 pt-16">
+      <div className="w-full lg:w-1/2 flex flex-col justify-center py-8 px-4 sm:px-6 lg:px-20 xl:px-24">
+        <div className="mx-auto w-full max-w-md">
+          <div className="text-center mb-4">
+            <Link to="/" className="inline-block">
+                <img src="/icon.png" className="w-12 h-12 " alt="Logo" />
+            </Link>
           </div>
-        )}
 
-        <form className="space-y-6" onSubmit={handleSubmit} noValidate>
-          <div className="space-y-4">
+          <h2 className="text-2xl font-bold text-gray-800 mb-2 text-center">
+            Daftar Akun Baru
+          </h2>
+          <p className="text-gray-600 mb-6 text-center">
+            Selamat datang! Silakan isi formulir di bawah untuk membuat akun baru.
+          </p>
+
+          {error && (
+            <div className="mb-6 p-3 bg-red-50 text-red-700 rounded-md border border-red-200 text-center">
+              {error}
+            </div>
+          )}
+
+          <form className="space-y-4" onSubmit={handleSubmit} noValidate>
             <div>
               <label
                 htmlFor="name"
-                className="block text-sm font-medium text-gray-700"
+                className="block text-sm font-medium text-gray-700 mb-2"
               >
                 Nama Lengkap
               </label>
@@ -59,93 +84,165 @@ const Register = () => {
                 type="text"
                 autoComplete="name"
                 required
-                className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm transition"
+                className="block w-full px-4 py-2.5 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 disabled={loading}
+                placeholder="Masukkan nama lengkap Anda"
               />
             </div>
 
             <div>
               <label
                 htmlFor="email"
-                className="block text-sm font-medium text-gray-700"
+                className="block text-sm font-medium text-gray-700 mb-2"
               >
-                Email
+                Alamat Email
               </label>
               <input
                 id="email"
                 type="email"
                 autoComplete="email"
                 required
-                className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm transition"
+                className="block w-full px-4 py-2.5 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 disabled={loading}
+                placeholder="Masukkan alamat email Anda"
               />
             </div>
 
+            {/* Password */}
             <div>
               <label
                 htmlFor="password"
-                className="block text-sm font-medium text-gray-700"
+                className="block text-sm font-medium text-gray-700 mb-2"
               >
                 Password
               </label>
-              <input
-                id="password"
-                type="password"
-                autoComplete="new-password"
-                required
-                className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm transition"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                disabled={loading}
-              />
+              <div className="relative">
+                <input
+                  id="password"
+                  type={showPassword ? "text" : "password"}
+                  autoComplete="new-password"
+                  required
+                  className="block w-full px-4 py-2.5 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition pr-10"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  disabled={loading}
+                  placeholder="Masukkan password"
+                />
+                <button
+                  type="button"
+                  className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-500"
+                  onClick={() => setShowPassword(!showPassword)}
+                  tabIndex={-1}
+                >
+                  {showPassword ? (
+                    <FaEyeSlash className="h-5 w-5" />
+                  ) : (
+                    <FaEye className="h-5 w-5" />
+                  )}
+                </button>
+              </div>
+              <p className="mt-1 text-xs text-gray-500">Minimal 6 karakter</p>
             </div>
-          </div>
 
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full flex justify-center items-center py-2 px-4 bg-indigo-600 hover:bg-indigo-700 disabled:opacity-60 text-white font-semibold rounded-md shadow focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition"
-          >
-            {loading && (
-              <svg
-                className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                aria-hidden="true"
+            {/* Konfirmasi Password */}
+            <div>
+              <label
+                htmlFor="confirmPassword"
+                className="block text-sm font-medium text-gray-700 mb-2"
               >
-                <circle
-                  className="opacity-25"
-                  cx="12"
-                  cy="12"
-                  r="10"
-                  stroke="currentColor"
-                  strokeWidth="4"
+                Konfirmasi Password
+              </label>
+              <div className="relative">
+                <input
+                  id="confirmPassword"
+                  type={showConfirmPassword ? "text" : "password"}
+                  autoComplete="new-password"
+                  required
+                  className="block w-full px-4 py-2.5 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition pr-10"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  disabled={loading}
+                  placeholder="Konfirmasi password Anda"
                 />
-                <path
-                  className="opacity-75"
-                  fill="currentColor"
-                  d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
-                />
-              </svg>
-            )}
-            {loading ? 'Mendaftar...' : 'Daftar'}
-          </button>
-        </form>
+                <button
+                  type="button"
+                  className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-500"
+                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                  tabIndex={-1}
+                >
+                  {showConfirmPassword ? (
+                    <FaEyeSlash className="h-5 w-5" />
+                  ) : (
+                    <FaEye className="h-5 w-5" />
+                  )}
+                </button>
+              </div>
+            </div>
 
-        <p className="text-center text-sm text-gray-600">
-          Sudah punya akun?{' '}
-          <Link
-            to="/login"
-            className="font-medium text-indigo-600 hover:text-indigo-500"
-          >
-            Login
-          </Link>
-        </p>
+            {/* Checkbox S&K */}
+            <div className="flex items-center">
+              <input
+                id="terms"
+                name="terms"
+                type="checkbox"
+                required
+                className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+              />
+              <label
+                htmlFor="terms"
+                className="ml-2 block text-sm text-gray-700"
+              >
+                Saya menyetujui{" "}
+                <Link
+                  to="/terms"
+                  className="text-indigo-600 hover:text-indigo-500"
+                >
+                  Syarat & Ketentuan
+                </Link>{" "}
+                dan{" "}
+                <Link
+                  to="/privacy"
+                  className="text-indigo-600 hover:text-indigo-500"
+                >
+                  Kebijakan Privasi
+                </Link>
+              </label>
+            </div>
+
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full flex justify-center items-center py-2.5 px-4 border border-transparent rounded-md shadow-sm text-white font-medium bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition disabled:opacity-50"
+            >
+              {loading ? "Mendaftarkan..." : "Daftar Sekarang"}
+            </button>
+          </form>
+
+          <div className="mt-6 text-center">
+            <p className="text-gray-600">
+              Sudah punya akun?{" "}
+              <Link
+                to="/login"
+                className="font-medium text-indigo-600 hover:text-indigo-500"
+              >
+                Masuk di sini
+              </Link>
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* Gambar Kanan */}
+      <div className="hidden lg:flex lg:w-1/2 items-center justify-center bg-indigo-100">
+        <img
+          src="/images/register.jpg"
+          alt="Ilustrasi Registrasi"
+          className="w-full h-full object-cover"
+        />
       </div>
     </div>
   );

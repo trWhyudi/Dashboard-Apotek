@@ -23,7 +23,6 @@ const CashierMedicines = () => {
         } else {
           response = await api.get('/medicine/all-medicines');
         }
-        console.log('API Response data:', response.data);
         setMedicines(response.data.medicines);
       } catch (error) {
         console.error('Error fetching medicines:', error);

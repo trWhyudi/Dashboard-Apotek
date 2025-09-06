@@ -1,24 +1,26 @@
-import { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { useAuth } from '../../context/AuthContext';
+import { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 const Login = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const { login, user } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
     if (user) {
-      navigate('/');
+      navigate("/");
     }
   }, [user, navigate]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError('');
+    setError("");
     setLoading(true);
 
     try {
@@ -27,130 +29,143 @@ const Login = () => {
         setError(result.message);
       }
     } catch {
-      setError('Gagal login. Silakan coba lagi.');
+      setError("Gagal login. Silakan coba lagi.");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4 py-12 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full bg-white p-10 rounded-xl shadow-lg space-y-6">
-        <h2 className="text-center text-3xl font-extrabold text-indigo-900">
-          Log In Akun
-        </h2>
-
-        {error && (
-          <div
-            className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-md"
-            role="alert"
-          >
-            {error}
+    <div className="min-h-screen flex bg-gradient-to-br from-indigo-100 via-indigo-50 to-indigo-200 pt-16">
+      {/* Form Login */}
+      <div className="w-full lg:w-1/2 flex flex-col justify-center py-8 px-4 sm:px-6 lg:px-20 xl:px-24">
+        <div className="mx-auto w-full max-w-md">
+          <div className="text-center mb-4">
+            <Link to="/" className="inline-block">
+              <img src="/icon.png" className="w-12 h-12 " alt="Logo" />
+            </Link>
           </div>
-        )}
 
-        <form className="space-y-6" onSubmit={handleSubmit} noValidate>
-          <div className="space-y-4">
+          <h2 className="text-2xl font-bold text-gray-800 mb-2 text-center">
+            Masuk ke Akun Anda
+          </h2>
+          <p className="text-gray-600 mb-6 text-center">
+            Selamat datang kembali! Silakan masuk ke akun Anda
+          </p>
+
+          {error && (
+            <div className="mb-6 p-3 bg-red-50 text-red-700 rounded-md border border-red-200 text-center">
+              {error}
+            </div>
+          )}
+
+          <form className="space-y-4" onSubmit={handleSubmit} noValidate>
             <div>
               <label
                 htmlFor="email"
-                className="block text-sm font-medium text-gray-700"
+                className="block text-sm font-medium text-gray-700 mb-2"
               >
-                Email
+                Alamat Email
               </label>
               <input
                 id="email"
                 type="email"
                 autoComplete="email"
                 required
-                className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm transition"
+                className="block w-full px-4 py-2.5 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 disabled={loading}
+                placeholder="Masukkan alamat email Anda"
               />
             </div>
+
             <div>
               <label
                 htmlFor="password"
-                className="block text-sm font-medium text-gray-700"
+                className="block text-sm font-medium text-gray-700 mb-2"
               >
                 Password
               </label>
-              <input
-                id="password"
-                type="password"
-                autoComplete="current-password"
-                required
-                className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm transition"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                disabled={loading}
-              />
+              <div className="relative">
+                <input
+                  id="password"
+                  type={showPassword ? "text" : "password"}
+                  autoComplete="current-password"
+                  required
+                  className="block w-full px-4 py-2.5 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition pr-10"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  disabled={loading}
+                  placeholder="Masukkan password Anda"
+                />
+                <button
+                  type="button"
+                  className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-500"
+                  onClick={() => setShowPassword(!showPassword)}
+                  tabIndex={-1}
+                >
+                  {showPassword ? (
+                    <FaEyeSlash className="h-5 w-5" />
+                  ) : (
+                    <FaEye className="h-5 w-5" />
+                  )}
+                </button>
+              </div>
             </div>
-          </div>
 
-          <div className="flex items-center justify-between">
-            <label htmlFor="remember-me" className="inline-flex items-center">
-              <input
-                id="remember-me"
-                type="checkbox"
-                className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
-                disabled={loading}
-              />
-              <span className="ml-2 text-sm text-gray-900">Ingat saya</span>
-            </label>
+            <div className="flex items-center justify-between">
+              <label htmlFor="remember-me" className="inline-flex items-center">
+                <input
+                  id="remember-me"
+                  name="remember-me"
+                  type="checkbox"
+                  className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+                  disabled={loading}
+                />
+                <span className="ml-2 text-sm text-gray-700">Ingat saya</span>
+              </label>
 
-            <div className="text-sm">
+              <div className="text-sm">
+                <Link
+                  to="/forgot-password"
+                  className="font-medium text-indigo-600 hover:text-indigo-500"
+                >
+                  Lupa password?
+                </Link>
+              </div>
+            </div>
+
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full flex justify-center items-center py-2.5 px-4 border border-transparent rounded-md shadow-sm text-white font-medium bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition disabled:opacity-50"
+            >
+              {loading ? "Masuk..." : "Masuk"}
+            </button>
+          </form>
+
+          <div className="mt-6 text-center">
+            <p className="text-gray-600">
+              Belum punya akun?{" "}
               <Link
-                to="/forgot-password"
+                to="/register"
                 className="font-medium text-indigo-600 hover:text-indigo-500"
               >
-                Lupa password?
+                Daftar di sini
               </Link>
-            </div>
+            </p>
           </div>
+        </div>
+      </div>
 
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full flex justify-center items-center py-2 px-4 bg-indigo-600 hover:bg-indigo-700 disabled:opacity-60 text-white font-semibold rounded-md shadow focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition"
-          >
-            {loading && (
-              <svg
-                className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                aria-hidden="true"
-              >
-                <circle
-                  className="opacity-25"
-                  cx="12"
-                  cy="12"
-                  r="10"
-                  stroke="currentColor"
-                  strokeWidth="4"
-                />
-                <path
-                  className="opacity-75"
-                  fill="currentColor"
-                  d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
-                />
-              </svg>
-            )}
-            {loading ? 'Logging in...' : 'Login'}
-          </button>
-        </form>
-
-        <p className="text-center text-sm text-gray-600">
-          Belum punya akun?{' '}
-          <Link
-            to="/register"
-            className="font-medium text-indigo-600 hover:text-indigo-500"
-          >
-            Daftar
-          </Link>
-        </p>
+      {/* Bagian Kanan - Gambar */}
+      <div className="hidden lg:flex lg:w-1/2 items-center justify-center bg-indigo-100">
+        <img
+          src="/images/register.jpg"
+          alt="Ilustrasi Login"
+          className="w-full h-full object-cover"
+        />
       </div>
     </div>
   );

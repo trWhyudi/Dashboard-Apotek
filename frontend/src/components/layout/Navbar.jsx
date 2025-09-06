@@ -1,7 +1,7 @@
-import { Link, useNavigate } from 'react-router-dom';
-import { useAuth } from '../../context/AuthContext';
-import { useState, useRef, useEffect } from 'react';
-import { FaChevronDown } from 'react-icons/fa';
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
+import { useState, useRef, useEffect } from "react";
+import { FaChevronDown } from "react-icons/fa";
 import { IoMdLogOut } from "react-icons/io";
 import { CgProfile } from "react-icons/cg";
 
@@ -18,8 +18,8 @@ const Navbar = () => {
         setDropdownOpen(false);
       }
     };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   return (
@@ -35,9 +35,22 @@ const Navbar = () => {
               <div className="relative" ref={dropdownRef}>
                 <button
                   onClick={toggleDropdown}
-                  className="flex items-center text-sm font-medium text-gray-700 hover:text-indigo-600 focus:outline-none"
+                  className="flex items-center space-x-2 text-sm font-medium text-gray-700 hover:text-indigo-600 focus:outline-none"
                 >
-                  <span>{user.name} ({user.role})</span>
+                  <img
+                    src={
+                      user.avatar?.startsWith("blob:")
+                        ? user.avatar
+                        : user.avatar
+                        ? `http://localhost:8001${user.avatar}`
+                        : "/images/default-avatar.png"
+                    }
+                    alt={user.name}
+                    className="w-8 h-8 rounded-full object-cover border-2 border-indigo-500"
+                  />
+                  <span>
+                    {user.name} ({user.role})
+                  </span>
                   <FaChevronDown className="ml-1 text-xs" />
                 </button>
 
@@ -55,10 +68,14 @@ const Navbar = () => {
                       <button
                         onClick={logout}
                         disabled={logoutLoading}
-                        className={`flex items-center gap-2 w-full text-left px-4 py-2 text-sm ${logoutLoading ? 'text-gray-400' : 'text-red-600 hover:bg-gray-100'}`}
+                        className={`flex items-center gap-2 w-full text-left px-4 py-2 text-sm ${
+                          logoutLoading
+                            ? "text-gray-400"
+                            : "text-red-600 hover:bg-gray-100"
+                        }`}
                       >
                         <IoMdLogOut className="text-lg" />
-                        {logoutLoading ? 'Logging out...' : 'Logout'}
+                        {logoutLoading ? "Logging out..." : "Logout"}
                       </button>
                     </div>
                   </div>

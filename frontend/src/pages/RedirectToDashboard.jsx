@@ -11,7 +11,7 @@ const RedirectToDashboard = () => {
 
     if (user.role === 'Admin') {
       navigate('/dashboard', { replace: true });
-    } else if (user.role === 'Cashier') {
+    } else if (user.role === 'Kasir') {
       navigate('/cashier/dashboard', { replace: true });
     }
   }, [user, navigate]);

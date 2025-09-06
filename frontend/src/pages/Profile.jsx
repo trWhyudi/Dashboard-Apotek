@@ -1,29 +1,43 @@
-import { useState, useEffect } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
-import api from '../utils/api';
-import { useAuth } from '../context/AuthContext';
-import { FiEdit, FiLogOut, FiSave, FiX, FiMail, FiUser } from 'react-icons/fi';
-import { MdOutlinePassword } from 'react-icons/md';
+import { useState, useEffect, useRef } from "react";
+import { useNavigate, Link } from "react-router-dom";
+import api from "../utils/api";
+import { useAuth } from "../context/AuthContext";
+import {
+  FiEdit,
+  FiLogOut,
+  FiSave,
+  FiX,
+  FiMail,
+  FiUser,
+  FiCamera,
+} from "react-icons/fi";
+import { MdOutlinePassword } from "react-icons/md";
+import Swal from "sweetalert2";
 
 const Profile = () => {
-  const { user, logout } = useAuth();
+  const { user, logout, setUser } = useAuth();
   const navigate = useNavigate();
-  const [formData, setFormData] = useState({ name: '', email: '' });
+  const [formData, setFormData] = useState({ name: "", email: "" });
   const [loading, setLoading] = useState(true);
   const [editMode, setEditMode] = useState(false);
-  const [error, setError] = useState('');
-  const [success, setSuccess] = useState('');
+  const [avatar, setAvatar] = useState(null);
+  const fileInputRef = useRef(null);
 
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const response = await api.get('/user/me');
+        const response = await api.get("/user/me");
         setFormData({
           name: response.data.user.name,
-          email: response.data.user.email
+          email: response.data.user.email,
         });
+        setAvatar(response.data.user.avatar);
       } catch (err) {
-        setError('Failed to load profile data');
+        Swal.fire({
+          icon: "error",
+          title: "Oops!",
+          text: "Gagal memuat data profil",
+        });
       } finally {
         setLoading(false);
       }
@@ -34,42 +48,111 @@ const Profile = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
+  };
+
+  const handleDeleteAvatar = async () => {
+    try {
+      setLoading(true);
+      await api.put(`/user/update-user/${user._id}`, { removeAvatar: true });
+      setAvatar(null);
+
+      Swal.fire({
+        icon: "success",
+        title: "Foto dihapus",
+        text: "Foto profil berhasil dihapus",
+        timer: 2000,
+        showConfirmButton: false,
+      });
+    } catch (err) {
+      Swal.fire({
+        icon: "error",
+        title: "Gagal",
+        text: err.response?.data?.message || "Gagal menghapus foto profil",
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError('');
-    setSuccess('');
     setLoading(true);
 
     try {
-      await api.put(`/user/update-user/${user._id}`, formData);
-      setSuccess('Profile updated successfully');
+      const formDataToSend = new FormData();
+      formDataToSend.append("name", formData.name);
+      formDataToSend.append("email", formData.email);
+      if (fileInputRef.current?.files[0]) {
+        formDataToSend.append("avatar", fileInputRef.current.files[0]);
+      }
+
+      await api.put(`/user/update-user/${user._id}`, formDataToSend, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      const updated = await api.get("/user/me");
+      setUser(updated.data.user);
+
+      setAvatar(updated.data.user.avatar);
+      setFormData({
+        name: updated.data.user.name,
+        email: updated.data.user.email,
+      });
+
+      Swal.fire({
+        icon: "success",
+        title: "Berhasil!",
+        text: "Profil berhasil diperbarui",
+        timer: 2000,
+        showConfirmButton: false,
+      });
+
       setEditMode(false);
     } catch (err) {
-      setError(err.response?.data?.message || 'Failed to update profile');
+      Swal.fire({
+        icon: "error",
+        title: "Gagal",
+        text: err.response?.data?.message || "Gagal memperbarui profil",
+      });
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleAvatarClick = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleAvatarChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setAvatar(URL.createObjectURL(file));
     }
   };
 
   const handleLogout = async () => {
     try {
       await logout();
-      navigate('/login');
+      navigate("/login");
     } catch (err) {
-      setError('Failed to logout');
+      Swal.fire({
+        icon: "error",
+        title: "Logout Gagal",
+        text: "Gagal logout. Silakan coba lagi.",
+      });
     }
   };
 
   if (loading && !user) {
     return (
       <div className="flex justify-center items-center h-screen">
-        <div className="text-lg font-medium text-gray-700">Loading...</div>
+        <div className="text-lg font-medium text-gray-700">Memuat...</div>
       </div>
     );
   }
@@ -77,24 +160,76 @@ const Profile = () => {
   return (
     <div className="ml-64 pt-16 px-6 mt-8">
       <div className="max-w-3xl mx-auto bg-white p-8 rounded-xl shadow-md border border-gray-200">
-        <div className="flex justify-between items-center mb-6">
-          <h1 className="text-3xl font-semibold text-gray-800">👤 Profile Settings</h1>
-          <button
-            onClick={handleLogout}
-            className="flex items-center gap-2 px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-md transition-all"
-          >
-            <FiLogOut size={18} />
-            Logout
-          </button>
-        </div>
+        <div className="flex flex-col items-center mb-8">
+          <div className="relative mb-6 group w-32 h-32">
+            <img
+              src={
+                avatar?.startsWith("blob:")
+                  ? avatar
+                  : avatar
+                  ? `http://localhost:8001${avatar}`
+                  : "/images/default-avatar.png"
+              }
+              alt="Profil"
+              className="w-32 h-32 rounded-full object-cover border-4 border-white shadow-lg"
+            />
 
-        {error && <div className="mb-4 p-3 bg-red-100 text-red-700 rounded">{error}</div>}
-        {success && <div className="mb-4 p-3 bg-green-100 text-green-700 rounded">{success}</div>}
+            {editMode && (
+              <div className="absolute inset-0 bg-black bg-opacity-30 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <button
+                  type="button"
+                  onClick={handleAvatarClick}
+                  className="text-white bg-white/20 hover:bg-white/30 p-2 rounded-full backdrop-blur-sm transition"
+                  title="Ganti foto"
+                >
+                  <FiCamera size={20} />
+                </button>
+              </div>
+            )}
+
+            {editMode && avatar && !avatar.startsWith("blob:") && (
+              <button
+                type="button"
+                onClick={handleDeleteAvatar}
+                className="absolute top-0 right-0 w-7 h-7 bg-red-500 hover:bg-red-600 text-white rounded-full flex items-center justify-center border-2 border-white shadow transition"
+                title="Hapus foto"
+              >
+                <FiX size={14} />
+              </button>
+            )}
+
+            <input
+              type="file"
+              ref={fileInputRef}
+              onChange={handleAvatarChange}
+              className="hidden"
+              accept="image/*"
+            />
+          </div>
+
+          <div className="flex items-center justify-between w-full">
+            <h1 className="text-3xl font-semibold text-gray-800">
+              Pengaturan Profil
+            </h1>
+            <button
+              onClick={handleLogout}
+              className="flex items-center gap-2 px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-md transition-all"
+            >
+              <FiLogOut size={18} />
+              Keluar
+            </button>
+          </div>
+        </div>
 
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
-            <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
-              <span className="flex items-center gap-1"><FiUser /> Full Name</span>
+            <label
+              htmlFor="name"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
+              <span className="flex items-center gap-1">
+                <FiUser /> Nama Lengkap
+              </span>
             </label>
             {editMode ? (
               <input
@@ -112,8 +247,13 @@ const Profile = () => {
           </div>
 
           <div>
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
-              <span className="flex items-center gap-1"><FiMail /> Email Address</span>
+            <label
+              htmlFor="email"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
+              <span className="flex items-center gap-1">
+                <FiMail /> Alamat Email
+              </span>
             </label>
             {editMode ? (
               <input
@@ -131,7 +271,9 @@ const Profile = () => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Role</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Role
+            </label>
             <p className="text-gray-800 capitalize">{user?.role}</p>
           </div>
 
@@ -143,7 +285,7 @@ const Profile = () => {
                   onClick={() => setEditMode(false)}
                   className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-100 transition"
                 >
-                  <FiX /> Cancel
+                  <FiX /> Batal
                 </button>
                 <button
                   type="submit"
@@ -151,7 +293,7 @@ const Profile = () => {
                   className="flex items-center gap-2 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-md transition disabled:opacity-50"
                 >
                   <FiSave />
-                  {loading ? 'Saving...' : 'Save Changes'}
+                  {loading ? "Menyimpan..." : "Simpan Perubahan"}
                 </button>
               </>
             ) : (
@@ -161,7 +303,7 @@ const Profile = () => {
                 className="flex items-center gap-2 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-md transition"
               >
                 <FiEdit />
-                Edit Profile
+                Edit Profil
               </button>
             )}
           </div>
@@ -170,13 +312,13 @@ const Profile = () => {
         <div className="mt-10 pt-6 border-t border-gray-200">
           <h2 className="text-lg font-medium text-gray-900 mb-4 flex items-center gap-2">
             <MdOutlinePassword size={20} />
-            Change Password
+            Ganti Kata Sandi
           </h2>
           <Link
             to="/forgot-password"
             className="text-indigo-600 hover:underline font-medium"
           >
-            Reset Password via Email
+            Reset kata sandi via email
           </Link>
         </div>
       </div>
