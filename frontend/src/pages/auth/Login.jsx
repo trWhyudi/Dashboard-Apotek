@@ -38,11 +38,11 @@ const Login = () => {
   return (
     <div className="min-h-screen flex bg-gradient-to-br from-indigo-100 via-indigo-50 to-indigo-200 pt-16">
       {/* Form Login */}
-      <div className="w-full lg:w-1/2 flex flex-col justify-center py-8 px-4 sm:px-6 lg:px-20 xl:px-24">
+      <div className="w-full lg:w-2/5 flex flex-col justify-center py-8 px-4 sm:px-6 lg:px-20 xl:px-24">
         <div className="mx-auto w-full max-w-md">
           <div className="text-center mb-4">
             <Link to="/" className="inline-block">
-              <img src="/icon.png" className="w-12 h-12 " alt="Logo" />
+              <img src="/images/icon.png" className="w-12 h-12 " alt="Logo" />
             </Link>
           </div>
 
@@ -160,9 +160,9 @@ const Login = () => {
       </div>
 
       {/* Bagian Kanan - Gambar */}
-      <div className="hidden lg:flex lg:w-1/2 items-center justify-center bg-indigo-100">
+      <div className="hidden lg:flex lg:w-3/5 items-center justify-center bg-indigo-100">
         <img
-          src="/images/register.jpg"
+          src="/images/banner.jpg"
           alt="Ilustrasi Login"
           className="w-full h-full object-cover"
         />
