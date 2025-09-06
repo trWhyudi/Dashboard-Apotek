@@ -1,22 +1,41 @@
-import express from 'express';
-import { createMedicine, updateMedicine, uploadMedicineImage, getAllMedicines, searchMedicines, deleteMedicine, getMedicineById, getCategorySummary } from '../controllers/medicineController.js';
-import { isAuthenticated } from '../middleware/auth.js';
+import express from "express";
+import {
+  createMedicine,
+  updateMedicine,
+  getAllMedicines,
+  searchMedicines,
+  deleteMedicine,
+  getMedicineById,
+  getCategorySummary,
+} from "../controllers/medicineController.js";
+import { isAuthenticated } from "../middleware/auth.js";
+import { uploadMedicine } from "../middleware/upload.js";
 
 const router = express.Router();
 
 // Create medicine
-router.post('/create-medicine', isAuthenticated, uploadMedicineImage, createMedicine);
+router.post(
+  "/create-medicine",
+  isAuthenticated,
+  uploadMedicine,
+  createMedicine
+);
 // Get all medicines
-router.get('/all-medicines', isAuthenticated, getAllMedicines);
+router.get("/all-medicines", isAuthenticated, getAllMedicines);
 // Get medicine by ID
-router.get('/single-medicine/:id', isAuthenticated, getMedicineById);
+router.get("/single-medicine/:id", isAuthenticated, getMedicineById);
 // Search medicines by name
-router.get('/search-medicines', isAuthenticated, searchMedicines);
+router.get("/search-medicines", isAuthenticated, searchMedicines);
 // get medicine categories summary
-router.get('/categories-summary', isAuthenticated, getCategorySummary)
+router.get("/categories-summary", isAuthenticated, getCategorySummary);
 // Update medicine
-router.put('/update-medicine/:id', isAuthenticated, uploadMedicineImage, updateMedicine);
+router.put(
+  "/update-medicine/:id",
+  isAuthenticated,
+  uploadMedicine,
+  updateMedicine
+);
 // Delete medicine
-router.delete('/delete-medicine/:id', isAuthenticated, deleteMedicine);
+router.delete("/delete-medicine/:id", isAuthenticated, deleteMedicine);
 
 export default router;

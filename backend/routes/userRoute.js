@@ -1,25 +1,39 @@
-import express from 'express';
-import { createUser, loginUser, createAdmin, getSingleAdmin, getAdminProfile, getCurrentUser, getAllUser, updateUser, deleteUser, forgotPassword, resetPassword, logoutUser } from '../controllers/userController.js';
-import { adminTokenAuth, isAuthenticated } from '../middleware/auth.js';
+import express from "express";
+import {
+  createUser,
+  loginUser,
+  createAdmin,
+  getSingleAdmin,
+  getAdminProfile,
+  getCurrentUser,
+  getAllUser,
+  updateUser,
+  deleteUser,
+  forgotPassword,
+  resetPassword,
+  logoutUser,
+} from "../controllers/userController.js";
+import { adminTokenAuth, isAuthenticated } from "../middleware/auth.js";
+import { uploadAvatar } from "../middleware/upload.js";
 
 const router = express.Router();
 
 // create admin
-router.post('/create-admin', adminTokenAuth, createAdmin);
+router.post("/create-admin", adminTokenAuth, createAdmin);
 // Login
-router.post('/login-user', loginUser);
+router.post("/login-user", loginUser);
 // get single admin
-router.get('/single-admin/:id', adminTokenAuth, getSingleAdmin);
+router.get("/single-admin/:id", adminTokenAuth, getSingleAdmin);
 // get admin profile
-router.get('/admin-profile', isAuthenticated, adminTokenAuth, getAdminProfile);
+router.get("/admin-profile", isAuthenticated, adminTokenAuth, getAdminProfile);
 // Create user
-router.post('/create-user', createUser);
+router.post("/create-user", createUser);
 // get current user
-router.get('/me', isAuthenticated, getCurrentUser);
+router.get("/me", isAuthenticated, getCurrentUser);
 // get all users
-router.get('/all-users', isAuthenticated, getAllUser);
+router.get("/all-users", isAuthenticated, getAllUser);
 // Update user
-router.put("/update-user/:id", isAuthenticated, updateUser);
+router.put("/update-user/:id", isAuthenticated, uploadAvatar, updateUser);
 // LogOut user
 router.get("/logout-user", isAuthenticated, logoutUser);
 // Delete user
@@ -28,6 +42,5 @@ router.delete("/delete-user/:id", isAuthenticated, deleteUser);
 router.post("/forgot-password", forgotPassword);
 // reset password
 router.put("/reset-password/:token", resetPassword);
-
 
 export default router;

@@ -25,6 +25,10 @@ const userSchema = new mongoose.Schema({
         default: 'Kasir',
         required: true,
     },
+    avatar: {
+        type: String,
+        default: null,
+    },
     resetPasswordToken: String,
     resetPasswordExpire: Date,
 });
