@@ -151,8 +151,8 @@ const Profile = () => {
 
   if (loading && !user) {
     return (
-      <div className="flex justify-center items-center h-screen">
-        <div className="text-lg font-medium text-gray-700">Memuat...</div>
+      <div className="flex justify-center items-center h-screen bg-gray-50">
+        <div className="animate-spin rounded-full border-8 border-t-8 border-gray-300 h-16 w-16 border-t-indigo-500"></div>
       </div>
     );
   }
@@ -274,7 +274,16 @@ const Profile = () => {
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Role
             </label>
-            <p className="text-gray-800 capitalize">{user?.role}</p>
+            <span
+              className={`inline-block px-3 py-1 text-sm font-semibold rounded-full capitalize
+              ${
+                user?.role === "admin"
+                  ? "bg-green-100 text-green-700"
+                  : "bg-blue-100 text-blue-700"
+              }`}
+            >
+              {user?.role}
+            </span>
           </div>
 
           <div className="flex justify-end gap-3 pt-4">
@@ -312,13 +321,13 @@ const Profile = () => {
         <div className="mt-10 pt-6 border-t border-gray-200">
           <h2 className="text-lg font-medium text-gray-900 mb-4 flex items-center gap-2">
             <MdOutlinePassword size={20} />
-            Ganti Kata Sandi
+            Ganti Password
           </h2>
           <Link
             to="/forgot-password"
             className="text-indigo-600 hover:underline font-medium"
           >
-            Reset kata sandi via email
+            Reset password via email
           </Link>
         </div>
       </div>

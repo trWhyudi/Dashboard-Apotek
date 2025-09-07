@@ -12,7 +12,7 @@ const AdminMedicines = () => {
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
-  const medicinesPerPage = 10;
+  const medicinesPerPage = 5;
 
   useEffect(() => {
     const fetchMedicines = async () => {

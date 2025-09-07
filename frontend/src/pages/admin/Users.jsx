@@ -56,8 +56,37 @@ const AdminUsers = () => {
     { key: 'actions', label: 'Aksi', className: 'text-center' },
   ];
 
-  const tableData = users.map(user => ({
+  const getRoleBadge = (role) => {
+    const baseClass =
+      "inline-block px-3 py-1 rounded-full text-xs font-semibold capitalize";
+
+    switch (role) {
+      case "Admin":
+        return (
+          <span className={`${baseClass} bg-green-100 text-blue-700`}>
+            Admin
+          </span>
+        );
+      case "Kasir":
+        return (
+          <span
+            className={`${baseClass} bg-blue-100 text-green-700`}
+          >
+            Cashier
+          </span>
+        );
+      default:
+        return (
+          <span className={`${baseClass} bg-gray-100 text-gray-700`}>
+            {role}
+          </span>
+        );
+    }
+  };
+
+  const tableData = users.map((user) => ({
     ...user,
+    role: getRoleBadge(user.role),
     actions: (
       <button
         onClick={() => handleDelete(user._id)}
@@ -67,7 +96,7 @@ const AdminUsers = () => {
       >
         Hapus
       </button>
-    )
+    ),
   }));
 
   if (loading) {
