@@ -16,7 +16,7 @@ const CashierTransactions = () => {
     endDate: null
   });
   const [currentPage, setCurrentPage] = useState(1);
-  const [transactionsPerPage] = useState(10);
+  const [transactionsPerPage] = useState(5);
   const [stats, setStats] = useState({
     totalAmount: 0,
     count: 0

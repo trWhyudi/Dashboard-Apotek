@@ -11,6 +11,7 @@ const CashierDashboard = () => {
     medicines: 0,
     todayTransactions: 0,
     todayRevenue: 0,
+    lineChartData: null,
   });
   const [categoryData, setCategoryData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -40,9 +41,12 @@ const CashierDashboard = () => {
           })
         );
 
-        const today = new Date().toISOString().split("T")[0];
+        // Transaksi hari ini dan pendapatan hari ini
+        const today = new Date();
+        const todayString = today.toISOString().split("T")[0];
+
         const todayTransactions = transactions.filter((t) =>
-          t.createdAt.startsWith(today)
+          t.createdAt.startsWith(todayString)
         );
 
         const todayRevenue = todayTransactions.reduce(
@@ -50,10 +54,41 @@ const CashierDashboard = () => {
           0
         );
 
+        // Data transaksi harian 7 hari terakhir (jumlah transaksi per hari)
+        const dailyCounts = {};
+        for (let i = 6; i >= 0; i--) {
+          const date = new Date();
+          date.setDate(today.getDate() - i);
+          const dateString = date.toISOString().split("T")[0];
+          dailyCounts[dateString] = 0;
+        }
+
+        transactions.forEach((t) => {
+          const dateKey = t.createdAt?.split("T")[0];
+          if (dailyCounts.hasOwnProperty(dateKey)) {
+            dailyCounts[dateKey] += 1; // Jumlah transaksi per hari
+          }
+        });
+
+        const lineChartData = {
+          labels: Object.keys(dailyCounts),
+          datasets: [
+            {
+              label: "Jumlah Transaksi",
+              data: Object.values(dailyCounts),
+              borderColor: "#3B82F6",
+              backgroundColor: "rgba(59, 130, 246, 0.2)",
+              fill: true,
+              tension: 0.3,
+            },
+          ],
+        };
+
         setStats({
           medicines: medicines.length,
           todayTransactions: todayTransactions.length,
           todayRevenue,
+          lineChartData,
         });
 
         setCategoryData(categoryChartData);
@@ -104,9 +139,13 @@ const CashierDashboard = () => {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div className="bg-white p-6 rounded-lg shadow">
           <h2 className="text-lg font-semibold mb-4">
-            Grafik Transaksi Harian
+            Grafik Pendapatan
           </h2>
-          <Chart type="line" />
+          {stats.lineChartData ? (
+            <Chart type="line" role="Kasir" data={stats.lineChartData} />
+          ) : (
+            <p>Belum ada data transaksi harian</p>
+          )}
         </div>
 
         <div className="bg-white p-6 rounded-lg shadow">

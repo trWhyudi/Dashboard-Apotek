@@ -90,7 +90,7 @@ const AdminDashboard = () => {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div className="bg-white p-6 rounded-lg shadow">
           <h2 className="text-lg font-semibold mb-4">Grafik Pendapatan</h2>
-          <Chart type="line" />
+          <Chart type="line" role="Admin" />
         </div>
         <div className="bg-white p-6 rounded-lg shadow">
           <h2 className="text-lg font-semibold mb-4">Kategori Obat</h2>

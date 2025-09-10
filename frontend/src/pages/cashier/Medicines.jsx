@@ -12,7 +12,7 @@ const CashierMedicines = () => {
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
-  const [medicinesPerPage] = useState(10);
+  const [medicinesPerPage] = useState(5);
 
   useEffect(() => {
     const fetchMedicines = async () => {
@@ -42,7 +42,7 @@ const CashierMedicines = () => {
 
   const handleSearch = (term) => {
     setSearchTerm(term);
-    setCurrentPage(1); // Reset to first page on new search
+    setCurrentPage(1);
   };
 
   const handleDelete = async (id) => {
