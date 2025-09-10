@@ -1,17 +1,20 @@
-import { Link } from 'react-router-dom';
-import moment from 'moment';
-import { formatCurrency } from '../../utils/helpers';
+import { Link } from "react-router-dom";
+import moment from "moment";
+import { formatCurrency } from "../../utils/helpers";
+import { FaEye, FaTimesCircle } from "react-icons/fa";
 
 const TransactionTable = ({ transactions, onCancel }) => {
   const getStatusBadge = (status) => {
     const statusClasses = {
-      completed: 'bg-green-100 text-green-800',
-      pending: 'bg-yellow-100 text-yellow-800',
-      cancelled: 'bg-red-100 text-red-800'
+      completed: "bg-green-100 text-green-800",
+      pending: "bg-yellow-100 text-yellow-800",
+      cancelled: "bg-red-100 text-red-800",
     };
-    
+
     return (
-      <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${statusClasses[status]}`}>
+      <span
+        className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${statusClasses[status]}`}
+      >
         {status}
       </span>
     );
@@ -53,17 +56,18 @@ const TransactionTable = ({ transactions, onCancel }) => {
                   {transaction.transactionNumber}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                  {moment(transaction.createdAt).format('DD MMM YYYY HH:mm')}
+                  {moment(transaction.createdAt).format("DD MMM YYYY HH:mm")}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                  {transaction.cashier?.name || 'N/A'}
+                  {transaction.cashier?.name || "N/A"}
                 </td>
                 <td className="px-6 py-4 text-sm text-gray-500">
                   <div className="flex flex-col">
                     {transaction.items.map((item, index) => (
                       <div key={index} className="flex justify-between">
                         <span>
-                          {item.medicine?.name || 'Deleted Item'} × {item.quantity}
+                          {item.medicine?.name || "Deleted Item"} ×{" "}
+                          {item.quantity}
                         </span>
                         <span className="font-medium">
                           {formatCurrency(item.subtotal)}
@@ -79,19 +83,21 @@ const TransactionTable = ({ transactions, onCancel }) => {
                   {getStatusBadge(transaction.status)}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                  <div className="flex space-x-2">
+                  <div className="flex space-x-3">
                     <Link
                       to={`/transactions/${transaction._id}`}
                       className="text-indigo-600 hover:text-indigo-900"
+                      title="Lihat Detail"
                     >
-                      Detail
+                      <FaEye />
                     </Link>
-                    {transaction.status === 'completed' && (
+                    {transaction.status === "completed" && (
                       <button
                         onClick={() => onCancel(transaction._id)}
                         className="text-red-600 hover:text-red-900"
+                        title="Batalkan Transaksi"
                       >
-                        Cancel
+                        <FaTimesCircle />
                       </button>
                     )}
                   </div>
@@ -100,8 +106,11 @@ const TransactionTable = ({ transactions, onCancel }) => {
             ))
           ) : (
             <tr>
-              <td colSpan="7" className="px-6 py-4 text-center text-sm text-gray-500">
-                No transactions found
+              <td
+                colSpan="7"
+                className="px-6 py-4 text-center text-sm text-gray-500"
+              >
+                Tidak ada transaksi ditemukan.
               </td>
             </tr>
           )}

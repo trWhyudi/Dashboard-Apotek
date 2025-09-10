@@ -59,26 +59,32 @@ const AdminReports = () => {
     }));
   };
 
-  const handleDownload = async (id) => {
+  const handleDownload = async (id, title) => {
     try {
-      const response = await api.get(`/report/download-report/${id}`, { responseType: 'blob' });
-      const contentDisposition = response.headers['content-disposition'];
-      let filename = 'report.pdf';
-      if (contentDisposition) {
-        const match = contentDisposition.match(/filename="?(.+)"?/);
-        if (match?.[1]) filename = match[1];
-      }
-      const url = window.URL.createObjectURL(new Blob([response.data]));
-      const link = document.createElement('a');
+      const response = await api.get(`/report/download-report/${id}`, {
+        responseType: "blob",
+      });
+
+      const blob = new Blob([response.data], { type: "application/pdf" });
+      const url = window.URL.createObjectURL(blob);
+
+      const fileName = `${title || "report"}.pdf`;
+
+      const link = document.createElement("a");
       link.href = url;
-      link.setAttribute('download', filename);
+      link.setAttribute("download", fileName);
       document.body.appendChild(link);
       link.click();
       link.remove();
+
       window.URL.revokeObjectURL(url);
     } catch (error) {
-      console.error('Download error:', error);
-      Swal.fire('Error', 'Gagal mengunduh laporan.', 'error');
+      console.error("Gagal mengunduh laporan:", error);
+      Swal.fire(
+        "Error",
+        "Gagal mengunduh laporan. Silakan coba lagi.",
+        "error"
+      );
     }
   };
 

@@ -108,32 +108,41 @@ const CashierTransactions = () => {
   }
 
   return (
-    <div className="ml-64 pt-16 p-6 mt-8">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold text-indigo-800">Data Transaksi</h1>
+    <main className="ml-64 pt-16 p-8 mt-8 bg-gray-50 min-h-screen">
+      <header className="flex justify-between items-center mb-8">
+        <h1 className="text-3xl font-extrabold text-indigo-900">
+          Data Transaksi
+        </h1>
         <Link
           to="/transactions/create"
-          className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 flex items-center"
+          className="inline-flex items-center px-5 py-2 bg-indigo-600 text-white rounded-lg shadow-md hover:bg-indigo-700 transition"
         >
-          <span className="material-icons-outlined mr-1"><IoMdAddCircleOutline /></span>
+          <IoMdAddCircleOutline className="mr-2 text-xl" />
           Tambah Transaksi
         </Link>
-      </div>
+      </header>
 
-      <div className="mb-6 bg-white p-4 rounded-lg shadow">
-        <div className="flex justify-between items-center mb-4">
-          <h2 className="text-lg font-semibold">Filter Transaksi</h2>
+      <section className="mb-6 bg-white p-6 rounded-xl shadow-md">
+        <div className="flex justify-between items-center mb-5">
+          <h2 className="text-xl font-semibold text-gray-800">
+            Filter Transaksi
+          </h2>
           <div className="text-sm text-gray-600">
-            Menampilkan {stats.count} transaksi ({formatCurrency(stats.totalAmount)})
+            Menampilkan <span className="font-semibold">{stats.count}</span>{" "}
+            transaksi (
+            <span className="font-semibold">
+              {formatCurrency(stats.totalAmount)}
+            </span>
+            )
           </div>
         </div>
         <DateRangePicker onChange={handleDateChange} value={dateRange} />
-      </div>
+      </section>
 
-      <div className="bg-white p-6 rounded-lg shadow">
-        <TransactionTable 
-          transactions={currentTransactions} 
-          onCancel={handleCancel} 
+      <section className="bg-white p-6 rounded-xl shadow-md">
+        <TransactionTable
+          transactions={currentTransactions}
+          onCancel={handleCancel}
         />
         {transactions.length > 0 && (
           <Pagination
@@ -142,8 +151,8 @@ const CashierTransactions = () => {
             onPageChange={setCurrentPage}
           />
         )}
-      </div>
-    </div>
+      </section>
+    </main>
   );
 };
 

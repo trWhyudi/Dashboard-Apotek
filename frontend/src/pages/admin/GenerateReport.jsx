@@ -132,7 +132,7 @@ const GenerateReport = () => {
                 loading || !formData.startDate || !formData.endDate ? 'opacity-50 cursor-not-allowed' : ''
               }`}
             >
-              {loading ? 'Generating...' : 'Generate Report'}
+              {loading ? 'Generating...' : 'Generate Laporan'}
             </button>
           </div>
         </form>

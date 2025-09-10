@@ -1,5 +1,6 @@
-import { Link } from 'react-router-dom';
-import moment from 'moment';
+import { Link } from "react-router-dom";
+import moment from "moment";
+import { FaEdit, FaTrash } from "react-icons/fa"; // <-- Tambah icon
 
 const MedicineTable = ({ medicines, onDelete }) => {
   return (
@@ -42,7 +43,9 @@ const MedicineTable = ({ medicines, onDelete }) => {
                   />
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm font-medium text-gray-900">{medicine.name}</div>
+                  <div className="text-sm font-medium text-gray-900">
+                    {medicine.name}
+                  </div>
                   <div className="text-sm text-gray-500 truncate max-w-xs">
                     {medicine.description}
                   </div>
@@ -57,21 +60,23 @@ const MedicineTable = ({ medicines, onDelete }) => {
                   {medicine.stock}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                  {moment(medicine.expired).format('DD MMM YYYY')}
+                  {moment(medicine.expired).format("DD MMM YYYY")}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                  <div className="flex space-x-2">
+                  <div className="flex space-x-3">
                     <Link
                       to={`/medicines/edit/${medicine._id}`}
                       className="text-indigo-600 hover:text-indigo-900"
+                      title="Edit Obat"
                     >
-                      Edit
+                      <FaEdit />
                     </Link>
                     <button
                       onClick={() => onDelete(medicine._id)}
                       className="text-red-600 hover:text-red-900"
+                      title="Hapus Obat"
                     >
-                      Hapus
+                      <FaTrash />
                     </button>
                   </div>
                 </td>
@@ -79,7 +84,10 @@ const MedicineTable = ({ medicines, onDelete }) => {
             ))
           ) : (
             <tr>
-              <td colSpan="6" className="px-6 py-4 text-center text-sm text-gray-500">
+              <td
+                colSpan="7"
+                className="px-6 py-4 text-center text-sm text-gray-500"
+              >
                 Tidak ada obat
               </td>
             </tr>
