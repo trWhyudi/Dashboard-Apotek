@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from "react-router-dom";
 import api from '../../utils/api';
 import MedicineSelection from '../../components/transaction/MedicineSelection';
 import TransactionSummary from '../../components/transaction/TransactionSummary';
-import { formatCurrency } from '../../utils/helpers';
+import { FaArrowLeft } from 'react-icons/fa';
 
 const CreateTransaction = () => {
   const navigate = useNavigate();
@@ -98,19 +98,20 @@ const CreateTransaction = () => {
   return (
     <div className="ml-64 pt-16 p-6 mt-8">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold text-indigo-800">Buat Transaksi Baru</h1>
-        <button
-          onClick={() => navigate('/transactions')}
-          className="px-4 py-2 border border-indigo-300 rounded-md text-sm font-medium text-indigo-700 hover:bg-indigo-50"
+        <h1 className="text-2xl font-bold text-indigo-800">
+          Buat Transaksi Baru
+        </h1>
+        <Link
+          to="/transactions"
+          className="inline-flex items-center justify-center px-4 py-2 border border-indigo-300 rounded-md text-sm font-medium text-indigo-700 hover:bg-indigo-50 transition-colors"
         >
+          <FaArrowLeft className="mr-2" />
           Kembali
-        </button>
+        </Link>
       </div>
 
       {error && (
-        <div className="mb-4 p-3 bg-red-100 text-red-700 rounded">
-          {error}
-        </div>
+        <div className="mb-4 p-3 bg-red-100 text-red-700 rounded">{error}</div>
       )}
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">

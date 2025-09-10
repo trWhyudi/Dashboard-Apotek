@@ -30,7 +30,6 @@ import CashierTransactionDetail from './pages/cashier/TransactionDetail';
 
 import NotFound from './pages/NotFound';
 import PrivateRoute from './components/auth/PrivateRoute';
-import RedirectToDashboard from './pages/RedirectToDashboard';
 
 import DashboardPage from './pages/DashboardPage';
 
@@ -80,14 +79,6 @@ const AppContent = () => {
               element={
                 <PrivateRoute allowedRoles={["Admin", "Kasir"]}>
                   <DashboardPage />
-                </PrivateRoute>
-              }
-            />
-            <Route
-              path="/cashier/dashboard"
-              element={
-                <PrivateRoute allowedRoles={["Kasir"]}>
-                  <DashboardPage /> {/* atau halaman khusus kasir */}
                 </PrivateRoute>
               }
             />
@@ -201,7 +192,7 @@ const AppContent = () => {
               path="/"
               element={
                 <PrivateRoute allowedRoles={["Admin", "Kasir"]}>
-                  <RedirectToDashboard />
+                  <Navigate to="/dashboard" replace />
                 </PrivateRoute>
               }
             />

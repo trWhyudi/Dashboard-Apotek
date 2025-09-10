@@ -192,7 +192,7 @@ const ReportDetail = () => {
         <ReportSummary summary={report.summary} />
       </div>
 
-      {/* Daily Breakdown Chart */}
+      {/* Daily Chart */}
       {report.summary.dailyBreakdown &&
         report.summary.dailyBreakdown.length > 0 && (
           <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
