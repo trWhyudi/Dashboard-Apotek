@@ -8,6 +8,7 @@ import {
   getCurrentUser,
   getAllUser,
   updateUser,
+  updateUserRole,
   deleteUser,
   forgotPassword,
   resetPassword,
@@ -34,6 +35,8 @@ router.get("/me", isAuthenticated, getCurrentUser);
 router.get("/all-users", isAuthenticated, getAllUser);
 // Update user
 router.put("/update-user/:id", isAuthenticated, uploadAvatar, updateUser);
+// Update user role
+router.put("/update-role/:id", isAuthenticated, adminTokenAuth, updateUserRole);
 // LogOut user
 router.get("/logout-user", isAuthenticated, logoutUser);
 // Delete user

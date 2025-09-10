@@ -217,6 +217,35 @@ export const updateUser = errorHandleMiddleware(async (req, res, next) => {
   }
 });
 
+export const updateUserRole = errorHandleMiddleware(async (req, res, next) => {
+  const { role } = req.body;
+  const userId = req.params.id;
+
+  if (!role) {
+    return next(new ErrorHandler("Role harus diisi", 400));
+  }
+
+  const allowedRoles = ["Admin", "Kasir"];
+  if (!allowedRoles.includes(role)) {
+    return next(new ErrorHandler("Role tidak valid", 400));
+  }
+
+  const user = await User.findById(userId);
+
+  if (!user) {
+    return next(new ErrorHandler("Pengguna tidak ditemukan", 404));
+  }
+
+  user.role = role;
+  await user.save();
+
+  res.status(200).json({
+    success: true,
+    message: "Role pengguna berhasil diperbarui",
+    user,
+  });
+});
+
 // Delete user
 export const deleteUser = errorHandleMiddleware(async (req, res, next) => {
   try {
