@@ -13,7 +13,7 @@ const AdminReports = () => {
   const [filter, setFilter] = useState({
     type: '',
     page: 1,
-    limit: 10,
+    limit: 5,
     sortBy: 'createdAt',
     sortOrder: 'desc'
   });
@@ -144,13 +144,11 @@ const AdminReports = () => {
           sortConfig={filter}
         />
         {totalReports > 0 && (
-          <div className="mt-6 flex justify-center">
-            <Pagination
-              currentPage={filter.page}
-              totalPages={Math.ceil(totalReports / filter.limit)}
-              onPageChange={(page) => setFilter(prev => ({ ...prev, page }))}
-            />
-          </div>
+          <Pagination
+            currentPage={filter.page}
+            totalPages={Math.ceil(totalReports / filter.limit)}
+            onPageChange={(page) => setFilter((prev) => ({ ...prev, page }))}
+          />
         )}
       </section>
     </main>

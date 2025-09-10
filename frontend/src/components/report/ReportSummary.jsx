@@ -1,42 +1,75 @@
-import { formatCurrency } from '../../utils/helpers';
+import React from "react";
+import { formatCurrency } from "../../utils/helpers";
 
 const ReportSummary = ({ summary }) => {
+  const formatNumber = (number) => {
+    return new Intl.NumberFormat("id-ID").format(number || 0);
+  };
+
+  const summaryCards = [
+    {
+      title: "Total Penjualan",
+      value: formatCurrency(summary?.totalSales || 0),
+      bgColor: "bg-blue-500",
+      textColor: "text-blue-600",
+      icon: "💰",
+    },
+    {
+      title: "Total Transaksi",
+      value: formatNumber(summary?.totalTransactions || 0),
+      bgColor: "bg-green-500",
+      textColor: "text-green-600",
+      icon: "📋",
+    },
+    {
+      title: "Rata-rata Transaksi",
+      value: formatCurrency(summary?.averageTransactionValue || 0),
+      bgColor: "bg-yellow-500",
+      textColor: "text-yellow-600",
+      icon: "📊",
+    },
+    {
+      title: "Total Obat Terjual",
+      value: `${formatNumber(summary?.totalMedicinesSold || 0)} pcs`,
+      bgColor: "bg-purple-500",
+      textColor: "text-purple-600",
+      icon: "💊",
+    },
+  ];
+
   return (
-    <div>
-      <h2 className="text-xl font-bold text-gray-800 mb-4">Ringkasan Penjualan</h2>
-      
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-        <div className="border p-4 rounded-lg bg-blue-50">
-          <h3 className="text-sm font-medium text-blue-800">Total Penjualan</h3>
-          <p className="mt-1 text-2xl font-bold text-blue-900">
-            {formatCurrency(summary.totalSales)}
-          </p>
-        </div>
-        <div className="border p-4 rounded-lg bg-purple-50">
-          <h3 className="text-sm font-medium text-purple-800">Total Transaksi</h3>
-          <p className="mt-1 text-2xl font-bold text-purple-900">
-            {summary.totalTransactions.toLocaleString()}
-          </p>
-        </div>
-        <div className="border p-4 rounded-lg bg-green-50">
-          <h3 className="text-sm font-medium text-green-800">Rata-rata Transaksi</h3>
-          <p className="mt-1 text-2xl font-bold text-green-900">
-            {formatCurrency(summary.averageTransactionValue)}
-          </p>
-        </div>
-        <div className="border p-4 rounded-lg bg-yellow-50">
-          <h3 className="text-sm font-medium text-yellow-800">Persentase Penjualan</h3>
-          <p className={`mt-1 text-2xl font-bold ${
-            summary.growthRate >= 0 ? 'text-green-600' : 'text-red-600'
-          }`}>
-            {summary.growthRate >= 0 ? '+' : ''}{summary.growthRate.toFixed(2)}%
-          </p>
-        </div>
+    <div className="space-y-6">
+      {/* Summary Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        {summaryCards.map((card, index) => (
+          <div
+            key={index}
+            className="bg-white rounded-lg border border-gray-200 p-4 hover:shadow-md transition-shadow"
+          >
+            <div className="flex items-center justify-between">
+              <div className="flex-1">
+                <p className="text-sm font-medium text-gray-500">
+                  {card.title}
+                </p>
+                <p className={`text-2xl font-bold ${card.textColor} mt-1`}>
+                  {card.value}
+                </p>
+              </div>
+              <div
+                className={`w-12 h-12 ${card.bgColor} rounded-lg flex items-center justify-center text-white text-xl`}
+              >
+                {card.icon}
+              </div>
+            </div>
+          </div>
+        ))}
       </div>
 
       {summary.topProducts && summary.topProducts.length > 0 && (
         <div className="mb-6">
-          <h3 className="text-lg font-medium text-gray-900 mb-2">Produk Terlaris</h3>
+          <h3 className="text-lg font-medium text-gray-900 mb-2">
+            Produk Terjual
+          </h3>
           <div className="overflow-x-auto">
             <table className="min-w-full divide-y divide-gray-200">
               <thead className="bg-gray-50">
@@ -57,7 +90,9 @@ const ReportSummary = ({ summary }) => {
                   <tr key={index}>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="text-sm font-medium text-gray-900">
-                        {product.medicineName || product.medicine?.name || 'N/A'}
+                        {product.medicineName ||
+                          product.medicine?.name ||
+                          "N/A"}
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">

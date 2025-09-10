@@ -21,6 +21,7 @@ const Profile = () => {
   const [loading, setLoading] = useState(true);
   const [editMode, setEditMode] = useState(false);
   const [avatar, setAvatar] = useState(null);
+  const [removeAvatar, setRemoveAvatar] = useState(false);
   const fileInputRef = useRef(null);
 
   useEffect(() => {
@@ -55,27 +56,8 @@ const Profile = () => {
   };
 
   const handleDeleteAvatar = async () => {
-    try {
-      setLoading(true);
-      await api.put(`/user/update-user/${user._id}`, { removeAvatar: true });
-      setAvatar(null);
-
-      Swal.fire({
-        icon: "success",
-        title: "Foto dihapus",
-        text: "Foto profil berhasil dihapus",
-        timer: 2000,
-        showConfirmButton: false,
-      });
-    } catch (err) {
-      Swal.fire({
-        icon: "error",
-        title: "Gagal",
-        text: err.response?.data?.message || "Gagal menghapus foto profil",
-      });
-    } finally {
-      setLoading(false);
-    }
+    setAvatar(null);
+    setRemoveAvatar(true);
   };
 
   const handleSubmit = async (e) => {
@@ -86,8 +68,13 @@ const Profile = () => {
       const formDataToSend = new FormData();
       formDataToSend.append("name", formData.name);
       formDataToSend.append("email", formData.email);
+
       if (fileInputRef.current?.files[0]) {
         formDataToSend.append("avatar", fileInputRef.current.files[0]);
+      }
+
+      if (removeAvatar) {
+        formDataToSend.append("removeAvatar", "true");
       }
 
       await api.put(`/user/update-user/${user._id}`, formDataToSend, {
@@ -114,6 +101,7 @@ const Profile = () => {
       });
 
       setEditMode(false);
+      setRemoveAvatar(false);
     } catch (err) {
       Swal.fire({
         icon: "error",
@@ -291,7 +279,11 @@ const Profile = () => {
               <>
                 <button
                   type="button"
-                  onClick={() => setEditMode(false)}
+                  onClick={() => {
+                    setEditMode(false);
+                    setRemoveAvatar(false);
+                    setAvatar(user?.avatar);
+                  }}
                   className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-100 transition"
                 >
                   <FiX /> Batal
